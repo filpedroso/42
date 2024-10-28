@@ -1,33 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   ft_bzero.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fpedroso <fpedroso@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/28 13:29:01 by fpedroso          #+#    #+#             */
-/*   Updated: 2024/10/28 15:35:03 by fpedroso         ###   ########.fr       */
+/*   Created: 2024/10/28 15:23:48 by fpedroso          #+#    #+#             */
+/*   Updated: 2024/10/28 15:44:44 by fpedroso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-/* Uses pointer incrementing and arithmetic in the end for fastest possible algorithm.
-However standard strlen is still very much faster  */
-
-size_t ft_strlen(const char *s)
+void	bzero(void *s, size_t n)
 {
-	const char *ptr;
+	unsigned char *ptr;
 
-	if (s == NULL)
+	ptr = (unsigned char *)s;
+	while (n--)
 	{
-		return (0);
-	}
-
-	ptr = s;
-	while (*ptr)
-	{
+		*ptr = '\0';
 		ptr++;
 	}
-	return ((size_t)(ptr - s));
 }

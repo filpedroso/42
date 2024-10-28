@@ -1,33 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   ft_memcpy.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fpedroso <fpedroso@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/28 13:29:01 by fpedroso          #+#    #+#             */
-/*   Updated: 2024/10/28 15:35:03 by fpedroso         ###   ########.fr       */
+/*   Created: 2024/10/28 15:45:31 by fpedroso          #+#    #+#             */
+/*   Updated: 2024/10/28 16:06:28 by fpedroso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-/* Uses pointer incrementing and arithmetic in the end for fastest possible algorithm.
-However standard strlen is still very much faster  */
-
-size_t ft_strlen(const char *s)
+void	*ft_memcpy(void *dest, const void *src, size_t n)
 {
-	const char *ptr;
+	unsigned char *d_ptr;
+	const unsigned char *s_ptr;
 
-	if (s == NULL)
-	{
-		return (0);
-	}
+	d_ptr = (unsigned char *)dest;
+	s_ptr = (const unsigned char *)src;
 
-	ptr = s;
-	while (*ptr)
+	while(n--)
 	{
-		ptr++;
+		*d_ptr = *s_ptr;
+		d_ptr++;
+		s_ptr++;
 	}
-	return ((size_t)(ptr - s));
+	return (dest);
 }
