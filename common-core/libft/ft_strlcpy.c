@@ -6,7 +6,7 @@
 /*   By: fpedroso <fpedroso@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 20:47:29 by fpedroso          #+#    #+#             */
-/*   Updated: 2024/10/30 09:54:16 by fpedroso         ###   ########.fr       */
+/*   Updated: 2024/10/30 13:26:37 by fpedroso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
 		{
 			amount = dstsize - 1;
 		}
-		ft_memmove(dst, src, amount);
+		ft_memcpy(dst, src, amount);
 		dst[amount] = '\0';
 	}
 	return (len);
