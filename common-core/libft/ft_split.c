@@ -6,7 +6,7 @@
 /*   By: fpedroso <fpedroso@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 19:11:32 by fpedroso          #+#    #+#             */
-/*   Updated: 2024/11/06 15:34:13 by fpedroso         ###   ########.fr       */
+/*   Updated: 2024/11/06 16:25:49 by fpedroso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ static void	populator(char **final, const char *str, char ch)
 
 	while (*str == ch)
 		str++;
-	while (*(final))
+	while (*str)
 	{
 		next = ft_strchr(str, (int)ch);
 		if (next)
@@ -101,7 +101,7 @@ static size_t	count_words(const char *str, char ch)
 	return (count);
 }
 
-int	main(void)
+/* int	main(void)
 {
 	const char	*stri = "amanheceu  peguei a    viola botei na   caixola e fui viajar ";
 	char		**strings;
@@ -114,4 +114,4 @@ int	main(void)
 	}
 	free(strings);
 	printf("the end");
-}
+} */
