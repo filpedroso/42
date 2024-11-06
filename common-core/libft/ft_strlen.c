@@ -6,24 +6,20 @@
 /*   By: fpedroso <fpedroso@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 13:29:01 by fpedroso          #+#    #+#             */
-/*   Updated: 2024/10/28 15:35:03 by fpedroso         ###   ########.fr       */
+/*   Updated: 2024/11/06 20:47:07 by fpedroso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-/* Uses pointer incrementing and arithmetic in the end for fastest possible algorithm.
-However standard strlen is still very much faster  */
-
-size_t ft_strlen(const char *s)
+size_t	ft_strlen(const char *s)
 {
-	const char *ptr;
+	const char	*ptr;
 
 	if (s == NULL)
 	{
 		return (0);
 	}
-
 	ptr = s;
 	while (*ptr)
 	{

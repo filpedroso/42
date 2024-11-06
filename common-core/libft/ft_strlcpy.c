@@ -52,7 +52,8 @@ size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
 
     // Test 3: Case where dstsize is zero
     result = ft_strlcpy(dst3, src1, sizeof(dst3));
-    printf("Test 3 - Result: %zu, Destination: '%s' (Should be empty)\n", result, dst3);
+    printf("Test 3 - Result: %zu, Destination: '%s' (Should be empty)\n",
+		result, dst3);
 
     // Test 4: Copying an empty string
     char emptySrc[] = "";
@@ -66,5 +67,5 @@ size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
     result = ft_strlcpy(dst5, exactSrc, sizeof(dst5));
     printf("Test 5 - Result: %zu, Destination: '%s'\n", result, dst5);
 
-    return 0;
+    return (0);
 } */

@@ -18,7 +18,6 @@ void	ft_striteri(char *s, void (*f)(unsigned int, char *))
 
 	if (!s || !f)
 		return ;
-
 	i = 0;
 	while (s[i])
 	{
@@ -32,7 +31,7 @@ void	ft_striteri(char *s, void (*f)(unsigned int, char *))
 		*c = *c - ' ';
 }
 
-int main()
+int	main(void)
 {
 	char s[] = "jacarezinho de asa delta";
 	ft_striteri(s, odd_toupper);

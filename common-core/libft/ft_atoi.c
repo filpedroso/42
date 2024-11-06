@@ -6,7 +6,7 @@
 /*   By: fpedroso <fpedroso@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/31 20:27:58 by fpedroso          #+#    #+#             */
-/*   Updated: 2024/11/06 15:34:05 by fpedroso         ###   ########.fr       */
+/*   Updated: 2024/11/06 19:39:37 by fpedroso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static const char	*advance_and_sign(const char *str, int *sign);
 
-int	atoi(const char *str)
+int	ft_atoi(const char *str)
 {
 	int	sign;
 	int	result;

@@ -18,7 +18,7 @@ int	ft_isdigit(int c)
 }
 
 /* #include <stdio.h>
-int main()
+int	main(void)
 {
 	for (int i = 0; i < 50; i++)
 	{

@@ -69,5 +69,5 @@ size_t	ft_strlcat(char *dst, const char *src, size_t dstsize)
     printf("Test 4:\n");
     printf("Result: %zu, dst: %s\n\n", ret4, dst4);
 
-    return 0;
+    return (0);
 } */

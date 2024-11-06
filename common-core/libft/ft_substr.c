@@ -50,4 +50,3 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	printf("string: %s", s2);
 	free(s2);
 } */
-

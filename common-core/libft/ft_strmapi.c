@@ -33,38 +33,38 @@ char	*ft_strmapi(char const *s, char (*f)(unsigned int, char))
 }
 
 /* #include <stdio.h>
+#include "libft.h"
 #include <ctype.h>
 #include <stdlib.h>
-#include "libft.h"
 
 // Example transformation functions
 
 // Convert each character to uppercase
-char to_uppercase(unsigned int i, char c)
+char	to_uppercase(unsigned int i, char c)
 {
 	(void)i; // Ignore the index if not needed
 	return (char)toupper((unsigned char)c);
 }
 
 // Shift each character by its index value
-char shift_by_index(unsigned int i, char c)
+char	shift_by_index(unsigned int i, char c)
 {
 	return (char)(c + i);
 }
 
 // Toggle case of each character
-char toggle_case(unsigned int i, char c)
+char	toggle_case(unsigned int i, char c)
 {
 	(void)i; // Ignore the index
 	if (islower((unsigned char)c))
 		return (char)toupper((unsigned char)c);
 	else if (isupper((unsigned char)c))
 		return (char)tolower((unsigned char)c);
-	return c;
+	return (c);
 }
 
 // Main function to test ft_strmapi
-int main(void)
+int	main(void)
 {
 	const char *str = "Hello World!";
 	char *result;
@@ -84,5 +84,5 @@ int main(void)
 	printf("Toggle case: %s\n", result);
 	free(result);
 
-	return 0;
+	return (0);
 } */

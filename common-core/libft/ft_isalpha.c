@@ -18,7 +18,7 @@ int	ft_isalpha(int c)
 }
 
 /* #include <stdio.h>
-int main()
+int	main(void)
 {
 	for (int i = 0; i < 95; i++)
 	{

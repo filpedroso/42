@@ -16,7 +16,7 @@ char	*ft_strrchr(const char *s, int c)
 {
 	char	*ptr;
 	char	ch;
-	
+
 	ptr = (char *)s + ft_strlen(s);
 	ch = (char)c;
 	while (ptr >= s)
@@ -59,5 +59,5 @@ char	*ft_strrchr(const char *s, int c)
     else
         printf("Null character not found\n");
 
-    return 0;
+    return (0);
 } */

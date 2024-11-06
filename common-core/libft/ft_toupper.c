@@ -23,18 +23,21 @@ int	ft_toupper(int c)
 
 /* int main(void)
 {
-    char test_chars[] = {'a', 'z', 'A', 'Z', '0', '!', 'm', 'M'};
-    size_t num_tests = sizeof(test_chars) / sizeof(test_chars[0]);
+	char	test_chars[];
+	size_t	num_tests;
     size_t i;
+	int		original;
+	int		converted;
 
+    test_chars[] = {'a', 'z', 'A', 'Z', '0', '!', 'm', 'M'};
+    num_tests = sizeof(test_chars) / sizeof(test_chars[0]);
     printf("Testing ft_toupper:\n");
     for (i = 0; i < num_tests; i++)
     {
-        int original = test_chars[i];
-        int converted = ft_toupper(original);
+        original = test_chars[i];
+        converted = ft_toupper(original);
         printf("ft_toupper('%c') = '%c'\n", original, converted);
     }
-
-    return 0;
+    return (0);
 }
  */

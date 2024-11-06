@@ -6,7 +6,7 @@
 /*   By: fpedroso <fpedroso@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/31 10:42:48 by fpedroso          #+#    #+#             */
-/*   Updated: 2024/10/31 14:27:39 by fpedroso         ###   ########.fr       */
+/*   Updated: 2024/11/06 20:49:15 by fpedroso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,10 @@ int	ft_strncmp(const char *s1, const char *s2, size_t n)
 	return ((unsigned char)*s1 - (unsigned char)*s2);
 }
 
+/* #include "libft.h"
 #include <stdio.h>
-#include "libft.h"
 
-/* int main(void)
+int main(void)
 {
     char *str1 = "Hello, World!";
     char *str2 = "Hello, World!";
@@ -46,7 +46,7 @@ int	ft_strncmp(const char *s1, const char *s2, size_t n)
     n = 7;
     printf("Test 2: %d\n", ft_strncmp(str1, str3, n)); // Expected: 0
 
-    // Test 3: Compare different strings with difference after the first 7 characters
+
     n = 8;
     printf("Test 3: %d\n", ft_strncmp(str1, str3, n)); // Expected: non-zero
 
@@ -62,5 +62,5 @@ int	ft_strncmp(const char *s1, const char *s2, size_t n)
     n = 1;
     printf("Test 6: %d\n", ft_strncmp(str1, str4, n)); // Expected: 0
 
-    return 0;
+    return (0);
 } */

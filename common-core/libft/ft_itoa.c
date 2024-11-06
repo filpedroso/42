@@ -6,7 +6,7 @@
 /*   By: fpedroso <fpedroso@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 19:57:18 by fpedroso          #+#    #+#             */
-/*   Updated: 2024/11/05 15:35:36 by fpedroso         ###   ########.fr       */
+/*   Updated: 2024/11/06 20:54:57 by fpedroso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ char	*ft_itoa(int n)
 		num = -num;
 	count = count_digits(num) + minus_flag;
 	ascii = ft_calloc(1, (count + 1));
+	if (!ascii)
+		return (NULL);
 	if (minus_flag)
 		ascii[0] = '-';
 	itoa_help(ascii + minus_flag, num, count - minus_flag);

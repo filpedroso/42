@@ -36,10 +36,11 @@ char	*ft_strchr(const char *s, int c)
 
 /* int main(void)
 {
-	const char	*str = "Hello, zworld!";
+	const char	*str;
 	char		ch;
 	char		*result;
 
+	str = "Hello, zworld!";
 	ch = 'o';
 	// Test case 1: Character is in the string
 	result = ft_strchr(str, ch);

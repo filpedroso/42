@@ -36,10 +36,13 @@ char	*ft_strtrim(char const *s1, char const *set)
 
 /* int main()
 {
-	char *cu = "$#%&   Amarante 2025&ˆ%&   &% $#";
-	char *set = "#$%^ &ˆ";
-	char *trimmed = ft_strtrim(cu, set);
+	char	*cu;
+	char	*set;
+	char	*trimmed;
 
+	cu = "$#%&   Amarante 2025&ˆ%&   &% $#";
+	set = "#$%^ &ˆ";
+	trimmed = ft_strtrim(cu, set);
 	printf("%s ", trimmed);
 }
  */

@@ -6,7 +6,7 @@
 /*   By: fpedroso <fpedroso@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 19:11:32 by fpedroso          #+#    #+#             */
-/*   Updated: 2024/11/06 16:25:49 by fpedroso         ###   ########.fr       */
+/*   Updated: 2024/11/06 21:19:38 by fpedroso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,21 @@ char	**ft_split(char const *s, char c)
 
 	if (!s)
 		return (NULL);
+	if (c == '\0')
+	{
+		final = (char **)ft_calloc(1, (size_t)((2) * sizeof(char *)));
+		if (!final)
+			return (NULL);
+		final[0] = ft_strdup(s);
+		if (!final[0])
+			return (NULL);
+		final[1] = NULL;
+		return (final);
+	}
 	count = count_words(s, c);
-	final = (char **)ft_calloc(1, (size_t)((count + 1) * sizeof(char **)));
-	final[count] = NULL;
+	final = (char **)ft_calloc(1, (size_t)((count + 1) * sizeof(char *)));
+	if (!final)
+		return (NULL);
 	populator(final, s, c);
 	return (final);
 }
@@ -33,7 +45,9 @@ char	**ft_split(char const *s, char c)
 static void	populator(char **final, const char *str, char ch)
 {
 	const char	*next;
+	size_t		i;
 
+	i = 0;
 	while (*str == ch)
 		str++;
 	while (*str)
@@ -41,7 +55,7 @@ static void	populator(char **final, const char *str, char ch)
 		next = ft_strchr(str, (int)ch);
 		if (next)
 		{
-			*final = strdup2(str, next);
+			final[i++] = strdup2(str, next);
 			str = next + 1;
 			while (*str == ch)
 				str++;
@@ -49,10 +63,11 @@ static void	populator(char **final, const char *str, char ch)
 		else
 		{
 			if (*str)
-				*final = ft_strdup(str);
+				final[i] = ft_strdup(str);
+			if (!final[i])
+				return ;
 			break ;
 		}
-		final++;
 	}
 }
 
@@ -64,6 +79,8 @@ static char	*strdup2(const char *begin, const char *end)
 
 	len = end - begin;
 	str = (char *)ft_calloc(1, len + 1);
+	if (!str)
+		return (NULL);
 	i = 0;
 	while (i < len)
 	{
@@ -103,7 +120,7 @@ static size_t	count_words(const char *str, char ch)
 
 /* int	main(void)
 {
-	const char	*stri = "amanheceu  peguei a    viola botei na   caixola e fui viajar ";
+	const char	*stri = "amanheceu  peguei a   viola  ";
 	char		**strings;
 
 	strings = ft_split(stri, ' ');
