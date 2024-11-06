@@ -6,7 +6,7 @@
 /*   By: fpedroso <fpedroso@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/31 17:45:12 by fpedroso          #+#    #+#             */
-/*   Updated: 2024/10/31 19:16:46 by fpedroso         ###   ########.fr       */
+/*   Updated: 2024/11/01 14:05:31 by fpedroso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,4 +167,5 @@ char	*ft_strnstr(const char *haystack, const char *needle, size_t len)
 	printf("Result:   %s\n\n", result ? result : "NULL");
 
 	return 0;
-} */
+}
+ */

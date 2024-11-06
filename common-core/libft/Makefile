@@ -6,7 +6,7 @@
 #    By: fpedroso <fpedroso@student.42lisboa.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/30 16:59:24 by fpedroso          #+#    #+#              #
-#    Updated: 2024/10/31 19:40:37 by fpedroso         ###   ########.fr        #
+#    Updated: 2024/11/06 13:52:24 by fpedroso         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -43,6 +43,6 @@ obliterate:
 re: fclean all
 
 test: $(OBJ)
-	$(CC) $(CFLAGS) -o $(TEST) $(OBJ)
+	$(CC) $(CFLAGS) $(OBJ) -o $(TEST)
 
 .PHONY: all clean fclean re test
