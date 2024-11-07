@@ -1,31 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_memcpy.c                                        :+:      :+:    :+:   */
+/*   ft_lstnew.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fpedroso <fpedroso@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/28 15:45:31 by fpedroso          #+#    #+#             */
-/*   Updated: 2024/11/07 10:31:20 by fpedroso         ###   ########.fr       */
+/*   Created: 2024/11/07 10:40:07 by fpedroso          #+#    #+#             */
+/*   Updated: 2024/11/07 13:15:53 by fpedroso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	*ft_memcpy(void *dest, const void *src, size_t n)
+t_list	*ft_lstnew(void *content)
 {
-	unsigned char		*d_ptr;
-	const unsigned char	*s_ptr;
+	t_list	*node;
 
-	if (!dest || !src)
+	node = (t_list *)malloc (sizeof(t_list));
+	if (!node)
 		return (NULL);
-	d_ptr = (unsigned char *)dest;
-	s_ptr = (const unsigned char *)src;
-	while (n--)
-	{
-		*d_ptr = *s_ptr;
-		d_ptr++;
-		s_ptr++;
-	}
-	return (dest);
+	node->content = content;
+	node->next = NULL;
+	return (node);
 }
+/* int main()
+{
+	int test = 42;
+	t_list *item = ft_lstnew(&test);
+	if (!item)
+	{
+		free(item);
+		return 1;
+	}
+	printf("%i", *((int *)item->content));
+	free(item);
+} */

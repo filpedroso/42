@@ -6,7 +6,7 @@
 /*   By: fpedroso <fpedroso@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 13:29:01 by fpedroso          #+#    #+#             */
-/*   Updated: 2024/11/06 20:47:07 by fpedroso         ###   ########.fr       */
+/*   Updated: 2024/11/07 10:27:50 by fpedroso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,6 @@ size_t	ft_strlen(const char *s)
 {
 	const char	*ptr;
 
-	if (s == NULL)
-	{
-		return (0);
-	}
 	ptr = s;
 	while (*ptr)
 	{
