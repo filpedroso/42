@@ -6,7 +6,7 @@
 /*   By: fpedroso <fpedroso@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 17:40:21 by fpedroso          #+#    #+#             */
-/*   Updated: 2024/11/04 18:53:25 by fpedroso         ###   ########.fr       */
+/*   Updated: 2024/11/08 15:15:49 by fpedroso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ char	*ft_strtrim(char const *s1, char const *set)
 	if (!s1 || !set)
 		return (NULL);
 	start = 0;
-	while (ft_strchr(set, s1[start]))
+	while (ft_strchr(set, s1[start]) && s1[start])
 	{
 		start++;
 	}

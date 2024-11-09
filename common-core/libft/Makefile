@@ -6,7 +6,7 @@
 #    By: fpedroso <fpedroso@student.42lisboa.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/07 09:44:58 by fpedroso          #+#    #+#              #
-#    Updated: 2024/11/07 15:31:23 by fpedroso         ###   ########.fr        #
+#    Updated: 2024/11/08 13:36:28 by fpedroso         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,6 +36,12 @@ BONUS = \
 	ft_lstadd_front.c \
 	ft_lstsize.c \
 	ft_lstlast.c \
+	ft_lstadd_back.c \
+	ft_lstdelone.c \
+	ft_lstclear.c \
+	ft_lstiter.c \
+	ft_lstmap.c \
+	
 
 $(NAME): $(OBJ)
 	ar rcs $(NAME) $(OBJ)

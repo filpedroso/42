@@ -6,116 +6,97 @@
 /*   By: fpedroso <fpedroso@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 19:11:32 by fpedroso          #+#    #+#             */
-/*   Updated: 2024/11/06 21:19:38 by fpedroso         ###   ########.fr       */
+/*   Updated: 2024/11/08 19:38:14 by fpedroso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static size_t	count_words(const char *str, char ch);
-static void		populator(char **final, const char *str, char ch);
-static char		*strdup2(const char *begin, const char *end);
+static char	*word_dup(const char *s, size_t len);
+static int	count_words(const char *s, char c);
+static void	free_all(char **arr, int i);
+static int	add_word(char **result, const char *s, char c, int *i);
 
 char	**ft_split(char const *s, char c)
 {
-	size_t	count;
-	char	**final;
+	char	**result;
+	int		i;
+	int		step;
 
 	if (!s)
 		return (NULL);
-	if (c == '\0')
-	{
-		final = (char **)ft_calloc(1, (size_t)((2) * sizeof(char *)));
-		if (!final)
-			return (NULL);
-		final[0] = ft_strdup(s);
-		if (!final[0])
-			return (NULL);
-		final[1] = NULL;
-		return (final);
-	}
-	count = count_words(s, c);
-	final = (char **)ft_calloc(1, (size_t)((count + 1) * sizeof(char *)));
-	if (!final)
+	result = (char **)malloc((count_words(s, c) + 1) * sizeof(char *));
+	if (!result)
 		return (NULL);
-	populator(final, s, c);
-	return (final);
-}
-
-static void	populator(char **final, const char *str, char ch)
-{
-	const char	*next;
-	size_t		i;
-
 	i = 0;
-	while (*str == ch)
-		str++;
-	while (*str)
+	while (*s)
 	{
-		next = ft_strchr(str, (int)ch);
-		if (next)
+		if (*s != c)
 		{
-			final[i++] = strdup2(str, next);
-			str = next + 1;
-			while (*str == ch)
-				str++;
+			step = add_word(result, s, c, &i);
+			if (!step)
+				return (NULL);
+			s += step;
 		}
 		else
-		{
-			if (*str)
-				final[i] = ft_strdup(str);
-			if (!final[i])
-				return ;
-			break ;
-		}
+			s++;
 	}
+	result[i] = NULL;
+	return (result);
 }
 
-static char	*strdup2(const char *begin, const char *end)
+static int	add_word(char **result, const char *s, char c, int *i)
 {
-	char	*str;
-	size_t	i;
-	size_t	len;
+	int	word_len;
 
-	len = end - begin;
-	str = (char *)ft_calloc(1, len + 1);
-	if (!str)
-		return (NULL);
-	i = 0;
-	while (i < len)
-	{
-		str[i] = begin[i];
-		i++;
-	}
-	return (str);
+	word_len = 0;
+	while (s[word_len] && s[word_len] != c)
+		word_len++;
+	result[*i] = word_dup(s, word_len);
+	if (!result[*i])
+		return (free_all(result, *i), 0);
+	(*i)++;
+	return (word_len);
 }
 
-static size_t	count_words(const char *str, char ch)
+static int	count_words(const char *s, char c)
 {
-	const char	*next;
-	size_t		count;
+	int	count;
+	int	in_word;
 
 	count = 0;
-	while (*str == ch)
-		str++;
-	while (*str)
+	in_word = 0;
+	while (*s)
 	{
-		next = ft_strchr(str, ch);
-		if (next)
+		if (*s != c && !in_word)
 		{
+			in_word = 1;
 			count++;
-			str = next + 1;
-			while (*str == ch)
-				str++;
 		}
-		else
-		{
-			if (*str)
-				count++;
-			break ;
-		}
+		else if (*s == c)
+			in_word = 0;
+		s++;
 	}
 	return (count);
+}
+
+static char	*word_dup(const char *s, size_t len)
+{
+	char	*word;
+
+	word = (char *)malloc(len + 1);
+	if (!word)
+		return (NULL);
+	ft_memcpy(word, s, len);
+	word[len] = '\0';
+	return (word);
+}
+
+static void	free_all(char **arr, int i)
+{
+	while (i >= 0)
+		free(arr[i--]);
+	free(arr);
 }
 
 /* int	main(void)
