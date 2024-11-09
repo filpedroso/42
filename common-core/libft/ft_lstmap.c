@@ -6,11 +6,13 @@
 /*   By: fpedroso <fpedroso@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 12:58:32 by fpedroso          #+#    #+#             */
-/*   Updated: 2024/11/08 15:16:36 by fpedroso         ###   ########.fr       */
+/*   Updated: 2024/11/09 17:26:28 by fpedroso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+
+static void	fullclear(t_list **newlist, void (*del)(void *), void *content);
 
 t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *))
 {
@@ -26,19 +28,26 @@ t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *))
 		content = f(lst->content);
 		if (!content)
 		{
-			ft_lstclear(&newlist, del);
+			fullclear(&newlist, del, content);
 			return (NULL);
 		}
 		newnode = ft_lstnew(content);
 		if (!newnode)
 		{
-			ft_lstclear(&newlist, del);
+			fullclear(&newlist, del, content);
 			return (NULL);
 		}
 		ft_lstadd_back(&newlist, newnode);
 		lst = lst->next;
 	}
 	return (newlist);
+}
+
+static void	fullclear(t_list **newlist, void (*del)(void *), void *content)
+{
+	if (content)
+		del(content);
+	ft_lstclear(newlist, del);
 }
 
 /* void *to_uppercase(void *content)
