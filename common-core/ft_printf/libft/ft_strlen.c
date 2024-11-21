@@ -1,28 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
+/*   ft_strlen.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fpedroso <fpedroso@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/05 19:58:49 by fpedroso          #+#    #+#             */
-/*   Updated: 2024/11/19 00:10:38 by fpedroso         ###   ########.fr       */
+/*   Created: 2024/10/28 13:29:01 by fpedroso          #+#    #+#             */
+/*   Updated: 2024/11/07 10:27:50 by fpedroso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	ft_putstr_fd(char *s, int fd)
+size_t	ft_strlen(const char *s)
 {
-	size_t	buffer;
+	const char	*ptr;
 
-	if (!s)
-		return (0);
-	buffer = ft_strlen(s);
-	write(fd, s, buffer);
-	return ((int)buffer);
+	ptr = s;
+	while (*ptr)
+	{
+		ptr++;
+	}
+	return ((size_t)(ptr - s));
 }
-/* int	main(void)
-{
-	ft_putstr_fd("jacare", 1);
-} */

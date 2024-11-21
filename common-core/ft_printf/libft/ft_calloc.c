@@ -1,28 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
+/*   ft_calloc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fpedroso <fpedroso@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/05 19:58:49 by fpedroso          #+#    #+#             */
-/*   Updated: 2024/11/19 00:10:38 by fpedroso         ###   ########.fr       */
+/*   Created: 2024/11/04 13:10:13 by fpedroso          #+#    #+#             */
+/*   Updated: 2024/11/04 14:25:13 by fpedroso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	ft_putstr_fd(char *s, int fd)
+void	*ft_calloc(size_t count, size_t size)
 {
-	size_t	buffer;
+	void	*allocated;
+	size_t	total;
 
-	if (!s)
-		return (0);
-	buffer = ft_strlen(s);
-	write(fd, s, buffer);
-	return ((int)buffer);
+	total = count * size;
+	allocated = malloc(total);
+	if (!allocated)
+	{
+		return (NULL);
+	}
+	ft_memset(allocated, 0, total);
+	return (allocated);
 }
-/* int	main(void)
+/* int main()
 {
-	ft_putstr_fd("jacare", 1);
-} */
+	int *test = ft_calloc(4, 5);
+	int i = 0;
+	while(i < 20)
+	{
+		printf("%i", test[i++]);
+	}
+}*/

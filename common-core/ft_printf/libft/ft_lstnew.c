@@ -1,28 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
+/*   ft_lstnew.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fpedroso <fpedroso@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/05 19:58:49 by fpedroso          #+#    #+#             */
-/*   Updated: 2024/11/19 00:10:38 by fpedroso         ###   ########.fr       */
+/*   Created: 2024/11/07 10:40:07 by fpedroso          #+#    #+#             */
+/*   Updated: 2024/11/07 13:15:53 by fpedroso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	ft_putstr_fd(char *s, int fd)
+t_list	*ft_lstnew(void *content)
 {
-	size_t	buffer;
+	t_list	*node;
 
-	if (!s)
-		return (0);
-	buffer = ft_strlen(s);
-	write(fd, s, buffer);
-	return ((int)buffer);
+	node = (t_list *)malloc (sizeof(t_list));
+	if (!node)
+		return (NULL);
+	node->content = content;
+	node->next = NULL;
+	return (node);
 }
-/* int	main(void)
+/* int main()
 {
-	ft_putstr_fd("jacare", 1);
+	int test = 42;
+	t_list *item = ft_lstnew(&test);
+	if (!item)
+	{
+		free(item);
+		return 1;
+	}
+	printf("%i", *((int *)item->content));
+	free(item);
 } */

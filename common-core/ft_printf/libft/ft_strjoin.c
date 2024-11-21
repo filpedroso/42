@@ -1,28 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
+/*   ft_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fpedroso <fpedroso@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/05 19:58:49 by fpedroso          #+#    #+#             */
-/*   Updated: 2024/11/19 00:10:38 by fpedroso         ###   ########.fr       */
+/*   Created: 2024/11/04 16:51:15 by fpedroso          #+#    #+#             */
+/*   Updated: 2024/11/04 18:52:18 by fpedroso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	ft_putstr_fd(char *s, int fd)
+char	*ft_strjoin(char const *s1, char const *s2)
 {
-	size_t	buffer;
+	char	*s3;
+	size_t	slen1;
+	size_t	slen2;
 
-	if (!s)
-		return (0);
-	buffer = ft_strlen(s);
-	write(fd, s, buffer);
-	return ((int)buffer);
+	slen1 = ft_strlen(s1);
+	slen2 = ft_strlen(s2);
+	s3 = malloc(slen1 + slen2 + 1);
+	if (!s3)
+		return (NULL);
+	ft_memcpy(s3, s1, slen1);
+	ft_memcpy(&s3[slen1], s2, slen2);
+	s3[slen1 + slen2] = '\0';
+	return (s3);
 }
-/* int	main(void)
+/* int main()
 {
-	ft_putstr_fd("jacare", 1);
+	const char *s1 = "paulo";
+	const char *s2 = "emilio";
+	ft_strjoin(s1, s2);
+	printf("%s %s", s1, s2);
 } */

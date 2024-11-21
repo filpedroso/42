@@ -1,28 +1,46 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
+/*   ft_lstsize.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fpedroso <fpedroso@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/05 19:58:49 by fpedroso          #+#    #+#             */
-/*   Updated: 2024/11/19 00:10:38 by fpedroso         ###   ########.fr       */
+/*   Created: 2024/11/07 14:36:02 by fpedroso          #+#    #+#             */
+/*   Updated: 2024/11/07 15:30:44 by fpedroso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	ft_putstr_fd(char *s, int fd)
+int	ft_lstsize(t_list *lst)
 {
-	size_t	buffer;
+	int		len;
+	t_list	*ptr;
 
-	if (!s)
+	if (!lst)
 		return (0);
-	buffer = ft_strlen(s);
-	write(fd, s, buffer);
-	return ((int)buffer);
+	ptr = lst;
+	len = 0;
+	while (ptr)
+	{
+		len++;
+		ptr = ptr->next;
+	}
+	return (len);
 }
-/* int	main(void)
+
+/* int main()
 {
-	ft_putstr_fd("jacare", 1);
+	int i = 0;
+	t_list *lst = ft_lstnew(&i);
+	t_list *new;
+
+	while (i < 10)
+	{
+		new = ft_lstnew(&i);
+		ft_lstadd_front(&lst, new);
+		i++;
+	}
+	int len = ft_lstsize(lst);
+	printf("%i", len);
 } */

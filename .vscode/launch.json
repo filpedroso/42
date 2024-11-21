@@ -1,20 +1,19 @@
 {
-    "version": "0.2.0",
-    "configurations": [
-        {
-            "name": "Debug Make Test",
-            "type": "cppdbg",
-            "request": "launch",
-            "program": "/Users/filpedroso/42/common-core/libft/test",  // Full path to the test executable
-            "args": [],
-            "stopAtEntry": false,
-            "cwd": "/Users/filpedroso/42/common-core/libft",  // Working directory is the libft folder
-            "environment": [],
-            "externalConsole": false,
-            "MIMode": "lldb",  // Use lldb for debugging
-            "miDebuggerPath": "/usr/bin/lldb",  // Path to lldb
-            "preLaunchTask": "make test",  // Run the "make test" task before launching the debugger
-            "logging": { "engineLogging": false }
-        }
-    ]
+  "configurations": [
+    {
+      "request": "launch",
+      "name": "Run selected program",
+      "program": "${fileDirname}/test",
+      "type": "lldb",
+      "cwd": "${fileDirname}",
+      "args": [],
+      "preLaunchTask": "makelldb: selected file"
+    },
+    {
+      "request": "launch",
+      "name": "Run new target",
+      "type": "makelldb"
+    }
+  ],
+  "version": "0.2.0"
 }

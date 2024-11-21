@@ -1,6 +1,14 @@
 {
 	"git.ignoreLimitWarning": true,
 	"files.associations": {
-		"sstream": "c"
-	}
+		"sstream": "c",
+		"libftprintf.h": "c",
+		"__bit_reference": "c",
+		"bitset": "c",
+		"chrono": "c",
+		"unordered_map": "c",
+		"ft_printf.h": "c",
+		"libft.h": "c"
+	},
+	"makefile.makefilePath": "/Users/filpedroso/42/common-core/ft_printf/Makefile"
 }

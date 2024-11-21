@@ -1,28 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
+/*   ft_memcpy.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fpedroso <fpedroso@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/05 19:58:49 by fpedroso          #+#    #+#             */
-/*   Updated: 2024/11/19 00:10:38 by fpedroso         ###   ########.fr       */
+/*   Created: 2024/10/28 15:45:31 by fpedroso          #+#    #+#             */
+/*   Updated: 2024/11/08 15:26:42 by fpedroso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	ft_putstr_fd(char *s, int fd)
+void	*ft_memcpy(void *dest, const void *src, size_t n)
 {
-	size_t	buffer;
+	unsigned char		*d_ptr;
+	const unsigned char	*s_ptr;
 
-	if (!s)
-		return (0);
-	buffer = ft_strlen(s);
-	write(fd, s, buffer);
-	return ((int)buffer);
+	if (n == 0)
+		return (dest);
+	if (!dest && !src)
+		return (NULL);
+	d_ptr = (unsigned char *)dest;
+	s_ptr = (const unsigned char *)src;
+	while (n--)
+	{
+		*d_ptr = *s_ptr;
+		d_ptr++;
+		s_ptr++;
+	}
+	return (dest);
 }
-/* int	main(void)
-{
-	ft_putstr_fd("jacare", 1);
-} */

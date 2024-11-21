@@ -1,28 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
+/*   ft_striteri.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fpedroso <fpedroso@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/05 19:58:49 by fpedroso          #+#    #+#             */
-/*   Updated: 2024/11/19 00:10:38 by fpedroso         ###   ########.fr       */
+/*   Created: 2024/11/05 19:20:29 by fpedroso          #+#    #+#             */
+/*   Updated: 2024/11/05 20:06:46 by fpedroso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	ft_putstr_fd(char *s, int fd)
+void	ft_striteri(char *s, void (*f)(unsigned int, char *))
 {
-	size_t	buffer;
+	unsigned int	i;
 
-	if (!s)
-		return (0);
-	buffer = ft_strlen(s);
-	write(fd, s, buffer);
-	return ((int)buffer);
+	if (!s || !f)
+		return ;
+	i = 0;
+	while (s[i])
+	{
+		f(i, &s[i]);
+		i++;
+	}
 }
-/* int	main(void)
+/* void	odd_toupper(unsigned int i, char *c)
 {
-	ft_putstr_fd("jacare", 1);
-} */
+	if (ft_isalpha(*c) && i % 2 == 1)
+		*c = *c - ' ';
+}
+
+int	main(void)
+{
+	char s[] = "jacarezinho de asa delta";
+	ft_striteri(s, odd_toupper);
+	printf("%s", s);
+}*/

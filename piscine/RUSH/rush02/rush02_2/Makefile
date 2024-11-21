@@ -1,5 +1,5 @@
 # Name of your executable
-NAME = rush-02
+NAME = num2word
 
 # Compiler to use
 CC = cc

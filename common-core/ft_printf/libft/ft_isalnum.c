@@ -1,28 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
+/*   ft_isalnum.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fpedroso <fpedroso@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/05 19:58:49 by fpedroso          #+#    #+#             */
-/*   Updated: 2024/11/19 00:10:38 by fpedroso         ###   ########.fr       */
+/*   Created: 2024/10/27 16:01:05 by fpedroso          #+#    #+#             */
+/*   Updated: 2024/10/27 18:47:27 by fpedroso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	ft_putstr_fd(char *s, int fd)
+int	ft_isalnum(int c)
 {
-	size_t	buffer;
-
-	if (!s)
-		return (0);
-	buffer = ft_strlen(s);
-	write(fd, s, buffer);
-	return ((int)buffer);
+	return (ft_isdigit(c) || ft_isalpha(c));
 }
-/* int	main(void)
+
+/* #include <stdio.h>
+int	main(void)
 {
-	ft_putstr_fd("jacare", 1);
+	for (int i = 0; i < 95; i++)
+	{
+		int	c = i + 32;
+		ft_isalnum(c) ? printf("%c YES\n", c) : printf("%c NO\n", c);
+	}
 } */
