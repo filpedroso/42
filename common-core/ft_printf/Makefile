@@ -6,17 +6,15 @@
 #    By: fpedroso <fpedroso@student.42lisboa.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/11 17:30:13 by fpedroso          #+#    #+#              #
-#    Updated: 2024/11/20 20:38:07 by fpedroso         ###   ########.fr        #
+#    Updated: 2024/11/21 20:26:52 by fpedroso         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = libftprintf.a
 CC = cc
-CFLAGS = -Wextra -Wall -Werror
+CFLAGS = -Wextra -Wall -Werror -g
 SRC = $(FILES)
 OBJ = $(SRC:.c=.o)
-LIBFT_DIR = ./libft
-LIBFT = $(LIBFT_DIR)/libft.a
 
 TEST = test
 
@@ -24,35 +22,40 @@ TEST = test
 FILES = 	ft_printf.c \
 			ft_printf_helpers.c \
 			ft_printf_tools.c \
+			ft_printf_trinkies.c \
+			ft_printf_atoi.c \
+			ft_printf_printnbr.c \
+
 
 
 $(NAME): $(OBJ)
 	ar -rcs $(NAME) $(OBJ)
-	ar -x $(LIBFT)
-	ar -rcs $(NAME) *.o
-	$(RM) *.o
-
-$(LIBFT):
-	@$(MAKE) -C $(LIBFT_DIR)
 
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
-all: $(LIBFT) $(NAME)
+all: $(NAME)
 
 clean:
-	$(RM) $(OBJ)
-	@$(MAKE) clean -C $(LIBFT_DIR)
+	rm -f $(OBJ) $(TEST)
+
+test: fclean $(OBJ)
+	$(CC) $(CFLAGS) $(OBJ) -o $(TEST)
 
 fclean: clean
-	$(RM) $(NAME)
-	@$(MAKE) fclean -C $(LIBFT_DIR)
+	rm -f $(NAME)
 
 re: fclean all
 
-test: fclean $(OBJ) $(LIBFT)
-	$(CC) $(CFLAGS) $(OBJ) $(LIBFT) -o $(TEST)
 
+oblit:
+	find . \( -type f -o -type d \) \
+    ! -name "*.c" \
+    ! -name "ft_printf.h" \
+    ! -name "Makefile" \
+	! -name "." \
+	! -name ".." \
+    -exec rm -rf {} +
 
 .PHONY: all clean fclean re test

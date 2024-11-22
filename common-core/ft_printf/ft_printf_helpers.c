@@ -6,7 +6,7 @@
 /*   By: fpedroso <fpedroso@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 00:24:19 by fpedroso          #+#    #+#             */
-/*   Updated: 2024/11/20 15:53:25 by fpedroso         ###   ########.fr       */
+/*   Updated: 2024/11/21 20:58:43 by fpedroso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,26 @@ int	content_len(const char **str, va_list *args_p)
 	else if (**str == 'x' || **str == 'X')
 		count = num_len((long long)va_arg(*args_p, unsigned int));
 	return (count);
+}
+
+char	*ft_strdup(const char *s1)
+{
+	char	*s2;
+	int		i;
+
+	s2 = malloc((ft_strlen(s1) + 1) * sizeof(char));
+	if (!s2)
+	{
+		return (NULL);
+	}
+	i = 0;
+	while (s1[i])
+	{
+		s2[i] = s1[i];
+		i++;
+	}
+	s2[i] = '\0';
+	return (s2);
 }
 
 /*

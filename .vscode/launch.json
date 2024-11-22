@@ -1,19 +1,17 @@
 {
-  "configurations": [
-    {
-      "request": "launch",
-      "name": "Run selected program",
-      "program": "${fileDirname}/test",
-      "type": "lldb",
-      "cwd": "${fileDirname}",
-      "args": [],
-      "preLaunchTask": "makelldb: selected file"
-    },
-    {
-      "request": "launch",
-      "name": "Run new target",
-      "type": "makelldb"
-    }
-  ],
-  "version": "0.2.0"
+	"configurations": [
+		{
+			"name": "(lldb) Launch",
+			"type": "cppdbg",
+			"request": "launch",
+			"program": "/Users/filpedroso/42/common-core/ft_printf/test",
+			"args": [],
+			"stopAtEntry": false,
+			"cwd": "/Users/filpedroso/42/common-core/ft_printf",
+			"environment": [],
+			"externalConsole": false,
+			"MIMode": "lldb"
+		}
+
+	]
 }

@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_atoi.c                                          :+:      :+:    :+:   */
+/*   ft_printf_atoi.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fpedroso <fpedroso@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/31 20:27:58 by fpedroso          #+#    #+#             */
-/*   Updated: 2024/11/07 12:33:30 by fpedroso         ###   ########.fr       */
+/*   Created: 2024/11/21 19:28:31 by fpedroso          #+#    #+#             */
+/*   Updated: 2024/11/21 19:46:16 by fpedroso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "ft_printf.h"
 
 static const char	*advance_and_sign(const char *str, int *sign);
 
@@ -46,10 +46,3 @@ static const char	*advance_and_sign(const char *str, int *sign)
 	}
 	return (str);
 }
-
-/* int main()
-{
-	const char *stri = "     -1";
-	int i = atoi(stri);
-	printf ("%i", i);
-} */

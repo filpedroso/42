@@ -6,7 +6,7 @@
 /*   By: fpedroso <fpedroso@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 17:30:17 by fpedroso          #+#    #+#             */
-/*   Updated: 2024/11/20 20:33:34 by fpedroso         ###   ########.fr       */
+/*   Updated: 2024/11/22 11:07:17 by fpedroso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,27 +17,23 @@ static void	flag_work(const char **str, va_list *args_p, int *count_p);
 static void	conv_work(const char **str, va_list *args_p, int *count_p);
 static int	print_hex(uintptr_t num, int counter, char upper);
 
-int	ft_printf(const char *str, ...)
+int	ft_printf(const char *fstr, ...)
 {
-	va_list	args;
-	int		count;
+	int			count;
+	va_list		args;
 
-	if (!str)
-	{
+	if (!fstr)
 		return (-1);
-	}
 	count = 0;
-	va_start(args, str);
-	while (*str)
+	va_start(args, fstr);
+	while (*fstr)
 	{
-		if (*str == '%')
-		{
-			percent_work(&str, &args, &count);
-		}
+		if (*fstr == '%')
+			percent_work((const char **)&fstr, &args, &count);
 		else
 		{
-			ft_putchar_fd(*str, 1);
-			str++;
+			ft_printchar(*fstr);
+			fstr++;
 			count++;
 		}
 	}
@@ -47,11 +43,12 @@ int	ft_printf(const char *str, ...)
 
 static void	percent_work(const char **str, va_list *args_p, int *count_p)
 {
-	while (**str == '%' && *(*str + 1) == '%')
+	if (**str == '%' && *(*str + 1) == '%')
 	{
-		ft_putchar_fd('%', 1);
+		ft_printchar('%');
 		*str += 2;
 		(*count_p)++;
+		return ;
 	}
 	if (**str == '%')
 		(*str)++;
@@ -91,19 +88,19 @@ static void	flag_work(const char **str, va_list *args_p, int *count_p)
 
 static void	conv_work(const char **str, va_list *args_p, int *count_p)
 {
-	while (is_conversion(**str))
+	if (is_conversion(**str))
 	{
 		if (**str == 'c')
-			*count_p += ft_putchar_fd(va_arg(*args_p, int), 1);
+			*count_p += ft_printchar(va_arg(*args_p, int));
 		else if (**str == 's')
-			*count_p += ft_putstr_fd(va_arg(*args_p, char *), 1);
+			*count_p += ft_printstr(va_arg(*args_p, char *));
 		else if (**str == 'i' || **str == 'd')
-			*count_p += ft_putnbr_fd(va_arg(*args_p, int), 1);
+			*count_p += ft_printnbr(va_arg(*args_p, int));
 		else if (**str == 'u')
-			*count_p += ft_putnbr_fd(va_arg(*args_p, unsigned int), 1);
+			*count_p += ft_printnbr(va_arg(*args_p, unsigned int));
 		else if (**str == 'p')
 		{
-			ft_putstr_fd("0x", 1);
+			ft_printstr("0x");
 			*count_p += 2 + print_hex((uintptr_t)va_arg(*args_p, void *), 0,
 					'x');
 		}
@@ -120,12 +117,12 @@ static int	print_hex(uintptr_t num, int counter, char upper)
 		counter = print_hex(num / 16, counter, upper);
 	if (upper == 'X')
 	{
-		ft_putchar_fd("0123456789ABCDEF"[num % 16], 1);
+		ft_printchar("0123456789ABCDEF"[num % 16]);
 		counter++;
 	}
 	else
 	{
-		ft_putchar_fd("0123456789abcdef"[num % 16], 1);
+		ft_printchar("0123456789abcdef"[num % 16]);
 		counter++;
 	}
 	return (counter);
@@ -133,14 +130,16 @@ static int	print_hex(uintptr_t num, int counter, char upper)
 
 /* int	main(void)
 {
+	//char c = 't';
 	int count = ft_printf("jacarezinho danado %%\n");
 	//int count2 = printf("jacarezinho danado %%\n");
 	ft_printf("ft: %p, %c\n", &count, 'c');
 	//printf("std: %p, %c", &count, 'c');
 	ft_printf("1: Hello, %s!\n", "World");
-	ft_printf("2: Number: %d\n", 42);
-	ft_printf("3: Width and precision: %10.5d\n", 42);
+	ft_printf("2: Number: %d\n", -42);
+	ft_printf("3: Width and precision: %.3d\n", 4201);
 	ft_printf("4: Left justify: %-10d|\n", 42);
+	ft_printf("%%c");
 } */
 
 /* int main(void)
