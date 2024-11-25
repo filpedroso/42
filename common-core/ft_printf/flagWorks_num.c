@@ -6,14 +6,14 @@
 /*   By: fpedroso <fpedroso@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 13:22:46 by fpedroso          #+#    #+#             */
-/*   Updated: 2024/11/25 14:24:57 by fpedroso         ###   ########.fr       */
+/*   Updated: 2024/11/25 19:02:01 by fpedroso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-static void	num_flag_help(int *count_p, t_flags flags, int cont_len, int num);
-static void	num_flag_left(int *count_p, t_flags flags, int cont_len, int num);
+static void	num_flag_help(int *count_p, t_flags flags, int cont_len, long num);
+static void	num_flag_left(int *count_p, t_flags flags, int cont_len, long num);
 static int	printnbr_hub(long num, char conv_type);
 
 void	num_flag(va_list *args_p, int *count_p, t_flags flags, int cont_len)
@@ -40,7 +40,7 @@ void	num_flag(va_list *args_p, int *count_p, t_flags flags, int cont_len)
 	num_flag_help(count_p, flags, cont_len, num);
 }
 
-static void	num_flag_help(int *count_p, t_flags flags, int cont_len, int num)
+static void	num_flag_help(int *count_p, t_flags flags, int cont_len, long num)
 {
 	if (!flags.l_just)
 	{
@@ -62,7 +62,7 @@ static void	num_flag_help(int *count_p, t_flags flags, int cont_len, int num)
 		num_flag_left(count_p, flags, cont_len, num);
 }
 
-static void	num_flag_left(int *count_p, t_flags flags, int cont_len, int num)
+static void	num_flag_left(int *count_p, t_flags flags, int cont_len, long num)
 {
 	if (flags.precision > cont_len)
 	{

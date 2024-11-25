@@ -6,7 +6,7 @@
 /*   By: fpedroso <fpedroso@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/23 16:20:52 by fpedroso          #+#    #+#             */
-/*   Updated: 2024/11/25 17:41:13 by fpedroso         ###   ########.fr       */
+/*   Updated: 2024/11/25 18:36:53 by fpedroso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ static void	parse_flags(const char **format, t_flags *flags)
 		else if (**format == '.')
 		{
 			flags->precision = ft_atoi(*format + 1);
-			*format += -1 + num_len(flags->precision);
+			*format += num_len(flags->precision);
 		}
 		else if (ft_isdigit(**format) && flags->precision == -1)
 		{

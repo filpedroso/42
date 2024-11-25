@@ -6,7 +6,7 @@
 /*   By: fpedroso <fpedroso@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 17:30:17 by fpedroso          #+#    #+#             */
-/*   Updated: 2024/11/25 17:57:51 by fpedroso         ###   ########.fr       */
+/*   Updated: 2024/11/25 19:03:24 by fpedroso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ int	ft_printf(const char *fstr, ...)
 static int	percent_work(const char **str, va_list *args_p, int *count_p, int *fstr_len)
 {
 	int	cont_len;
+	const char	*copy_s;
 
 	while (**str == '%' && *(*str + 1) == '%')
 	{
@@ -56,7 +57,10 @@ static int	percent_work(const char **str, va_list *args_p, int *count_p, int *fs
 	}
 	if (**str == '%')
 		(*str)++;
-	cont_len = content_len(str, args_p);
+	copy_s = *str;
+	while (!is_conversion(*copy_s))
+		copy_s++;
+	cont_len = content_len(&copy_s, args_p);
 	flag_works(str, args_p, count_p, cont_len);
 	return (cont_len);
 }
@@ -290,7 +294,7 @@ int	main(void)
 	printf(" ft_printf out\n%d ft_printf length\n", b = ft_printf("%x", 0));
 	a == b ? printf("TEST PASSED\n\n") : printf(FAIL);
 }*/
-/* #include "ft_printf.h"
+#include "ft_printf.h"
 #include <limits.h>
 #include <stdio.h>
 
@@ -533,4 +537,4 @@ int	main(void)
 			UINT_MAX));
 	a == b ? printf("TEST PASSED\n\n") : printf(FAIL);
 
-} */
+}
