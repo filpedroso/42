@@ -6,7 +6,7 @@
 #    By: fpedroso <fpedroso@student.42lisboa.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/11 17:30:13 by fpedroso          #+#    #+#              #
-#    Updated: 2024/11/23 16:48:59 by fpedroso         ###   ########.fr        #
+#    Updated: 2024/11/25 13:35:20 by fpedroso         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,6 +25,7 @@ FILES = 	ft_printf.c \
 			ft_printf_atoi.c \
 			flagWorks.c \
 			flagWorks-utils.c \
+			flagWorks_num.c \
 
 
 $(NAME): $(OBJ)
@@ -53,7 +54,7 @@ re: fclean all
 oblit:
 	find . \( -type f -o -type d \) \
     ! -name "*.c" \
-    ! -name "ft_printf.h" \
+    ! -name "*.h" \
     ! -name "Makefile" \
 	! -name "." \
 	! -name ".." \

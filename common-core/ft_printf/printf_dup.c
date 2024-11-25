@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_printf.c                                        :+:      :+:    :+:   */
+/*   printf_dup.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fpedroso <fpedroso@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 17:30:17 by fpedroso          #+#    #+#             */
-/*   Updated: 2024/11/25 17:57:51 by fpedroso         ###   ########.fr       */
+/*   Updated: 2024/11/25 16:40:25 by fpedroso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,8 @@ int	ft_printf(const char *fstr, ...)
 
 static int	percent_work(const char **str, va_list *args_p, int *count_p, int *fstr_len)
 {
-	int	cont_len;
+	int		cont_len;
+	const char	*str_copy;
 
 	while (**str == '%' && *(*str + 1) == '%')
 	{
@@ -56,7 +57,10 @@ static int	percent_work(const char **str, va_list *args_p, int *count_p, int *fs
 	}
 	if (**str == '%')
 		(*str)++;
-	cont_len = content_len(str, args_p);
+	str_copy = *str;
+	while (is_flag(*str_copy) || ft_isdigit(*str_copy))
+		str_copy++;
+	cont_len = content_len(&str_copy, args_p);
 	flag_works(str, args_p, count_p, cont_len);
 	return (cont_len);
 }
@@ -83,9 +87,9 @@ static int	content_len(const char **str, va_list *args_p)
 	else if (**str == 'u')
 		count = num_len((long long)va_arg(copy_args, unsigned int));
 	else if (**str == 'p')
-		count = hex_len((long long)(uintptr_t)va_arg(copy_args, void *));
+		count = num_len((long long)(uintptr_t)va_arg(copy_args, void *));
 	else if (**str == 'x' || **str == 'X')
-		count = hex_len((long long)va_arg(copy_args, unsigned int));
+		count = num_len((long long)va_arg(copy_args, unsigned int)) - 2;
 	va_end(copy_args);
 	return (count);
 }
@@ -179,10 +183,16 @@ static int	content_len(const char **str, va_list *args_p)
 	d = 'b';
 	num = 0x7FFFFFFF;
 	u = 0xFFFFFFFF;
+	pf = printf("a%p\n", (void *)&c);
+	printf("\n\n\n");
+	pf = printf("a%x\n3", num);
+	pf = ft_printf("a%x\n3", num);
+	printf("\n\n\n");
 	pf = printf("a%pbc%%de%5cfg%-20.15uhij%2sk%-20.15dlm%inop%20.15Xq%xr\n",
 			(void *)&c, d, u, s, num, 0, u, u);
 	fp = ft_printf("a%pbc%%de%5cfg%-20.15uhij%2sk%-20.15dlm%inop%20.15Xq%xr\n",
 			(void *)&c, d, u, s, num, 0, u, u);
+	
 	pf = printf(">%20.15Xq<\n", u);
 	fp = ft_printf(">%20.15Xq<\n", u);
 	printf("pf = %d, fp = %d\n", pf, fp);
@@ -223,21 +233,9 @@ static int	content_len(const char **str, va_list *args_p)
 
 /* int	main(void)
 {
+	int n = 42;
 
-	ft_printf("3: Width and precision: %.3d\n", 4201);
-	ft_printf("4: Left justify: %-10d|\n", 42);
-
-
-	int ft1 = ft_printf(" %-9X %-10X %-11X %-12X %-13X %-14X %-15X", INT_MAX,
-			INT_MIN, LONG_MAX, LONG_MIN, ULONG_MAX, 0, -42);
-	printf("\nft1: %i", ft1);
-	int p1 = printf(" %-9X %-10X %-11X %-12X %-13X %-14X %-15X", INT_MAX,
-			INT_MIN, LONG_MAX, LONG_MIN, ULONG_MAX, 0, -42);
-	printf("\np1: %i", p1);
-	int ft2 = ft_printf(" %2p ", -1);
-	printf("\nft2: %i", ft2);
-	int p2 = printf(" %2p ", -1);
-	printf("\np2: %i", p2);
+	ft_printf("%5i", n);
 } */
 
 /* int main(void)
@@ -256,6 +254,7 @@ static int	content_len(const char **str, va_list *args_p)
 
 	// Width and precision
 	ret1 = printf("3: Width and precision: %10.5d\n", 42);
+	ret2 = ft_printf("3: Width and precision: %10.5d\n", 42);
 	printf("printf: %d, ft_printf: %d\n\n", ret1, ret2);
 
 	// Flags
@@ -277,24 +276,8 @@ static int	content_len(const char **str, va_list *args_p)
 	return (0);
 } */
 
-/* #define FAIL "****** TEST FAILED *********\n\n"
+#define FAIL "****** TEST FAILED *********\n\n"
 #include <limits.h>
-
-int	main(void)
-{
-	int a;
-	int b;
-
-
-	printf(" printf out\n%d printf length\n", a = printf("%x", 0));
-	printf(" ft_printf out\n%d ft_printf length\n", b = ft_printf("%x", 0));
-	a == b ? printf("TEST PASSED\n\n") : printf(FAIL);
-}*/
-/* #include "ft_printf.h"
-#include <limits.h>
-#include <stdio.h>
-
-#define FAIL "************** TEST FAILED *************\n\n"
 
 int	main(void)
 {
@@ -511,6 +494,20 @@ int	main(void)
 			(void *)ULONG_MAX, (void *)-ULONG_MAX));
 	a == b ? printf("TEST PASSED\n\n") : printf(FAIL);
 
+	// s tests
+
+	//char *s = "this is a longer test string to test printf";
+
+	printf("s tests\n");
+	printf(" printf out\n%d printf length\n", a = printf("%s", ""));
+	printf(" ft_printf out\n%d ft_printf length\n", b = ft_printf("%s", ""));
+	a == b ? printf("TEST PASSED\n\n") : printf(FAIL);
+
+	printf(" printf out\n%d printf length\n", a = printf(" %s %s ", "", "-"));
+	printf(" ft_printf out\n%d ft_printf length\n", b = ft_printf(" %s %s ", "",
+			"-"));
+	a == b ? printf("TEST PASSED\n\n") : printf(FAIL);
+
 	// u tests
 	printf("u tests\n");
 	printf(" printf out\n%d printf length\n", a = printf(" %u ", -100));
@@ -533,4 +530,4 @@ int	main(void)
 			UINT_MAX));
 	a == b ? printf("TEST PASSED\n\n") : printf(FAIL);
 
-} */
+}

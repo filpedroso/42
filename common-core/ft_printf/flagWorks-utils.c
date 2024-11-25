@@ -6,7 +6,7 @@
 /*   By: fpedroso <fpedroso@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/23 16:29:54 by fpedroso          #+#    #+#             */
-/*   Updated: 2024/11/23 23:06:54 by fpedroso         ###   ########.fr       */
+/*   Updated: 2024/11/25 17:55:30 by fpedroso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	init_flags(t_flags *flags)
 {
 	flags->has_flag = 0;
 	flags->l_just = 0;
-	flags->zero_pad = 0;
+	flags->zero_pad = ' ';
 	flags->precision = -1;
 	flags->width = 0;
 	flags->conv = '\0';
@@ -62,4 +62,22 @@ int	num_len(long long num)
 	return (len + minus_flag);
 }
 
+int	hex_len(long long num)
+{
+	int	len;
+	int	minus_flag;
 
+	minus_flag = 0;
+	len = 1;
+	if (num < 0)
+	{
+		num = -num;
+		minus_flag = 1;
+	}
+	while (num >= 16)
+	{
+		num = num / 16;
+		len++;
+	}
+	return (len + minus_flag);
+}
