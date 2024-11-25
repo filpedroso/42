@@ -6,80 +6,71 @@
 /*   By: fpedroso <fpedroso@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 00:24:19 by fpedroso          #+#    #+#             */
-/*   Updated: 2024/11/21 20:58:43 by fpedroso         ###   ########.fr       */
+/*   Updated: 2024/11/24 19:10:01 by fpedroso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-void	parse_flags(const char **format, t_flags *flags)
+static void	deli_rec(long long num, int *count);
+
+int	ft_printchar(char c)
 {
-	while (**format && (ft_isdigit(**format) || is_flag(**format)))
-	{
-		if (**format == '-')
-		{
-			flags->left_justify = 1;
-			flags->zero_padding = 0;
-		}
-		else if (**format == '0' && flags->width == 0
-			&& flags->left_justify == 0)
-			flags->zero_padding = 1;
-		else if (**format == '.')
-		{
-			flags->precision = ft_atoi(*format + 1);
-			*format += num_len(flags->precision);
-			continue ;
-		}
-		else if (ft_isdigit(**format) && flags->precision == -1)
-		{
-			flags->width = ft_atoi(*format);
-			*format += num_len(flags->width);
-			continue ;
-		}
-		(*format)++;
-	}
+	int	i;
+
+	i = write(1, &c, 1);
+	return (i);
 }
 
-int	content_len(const char **str, va_list *args_p)
+int	ft_printstr(char *s, int trim)
 {
-	int	count;
+	size_t	buffer;
 
+	if (!s)
+	{
+		write(1, "(null)", 6);
+		return (6);
+	}
+	if (s[0] == '\0')
+		return (0);
+	buffer = ft_strlen(s);
+	return (write(1, s, buffer - trim));
+}
+
+int	ft_printnbr(long n)
+{
+	long long	num;
+	int			count;
+
+	num = n;
 	count = 0;
-	if (**str == 'c')
-		count = 1;
-	else if (**str == 's')
-		count = ft_strlen(va_arg(*args_p, char *));
-	else if (**str == 'i' || **str == 'd')
-		count = num_len(va_arg(*args_p, int));
-	else if (**str == 'u')
-		count = num_len((long long)va_arg(*args_p, unsigned int));
-	else if (**str == 'p')
-		count = 2 + num_len((long long)(uintptr_t)va_arg(*args_p, void *));
-	else if (**str == 'x' || **str == 'X')
-		count = num_len((long long)va_arg(*args_p, unsigned int));
+	if (num < 0)
+	{
+		num = -num;
+		ft_printchar('-');
+		count++;
+	}
+	deli_rec(num, &count);
 	return (count);
 }
 
-char	*ft_strdup(const char *s1)
+static void	deli_rec(long long num, int *count)
 {
-	char	*s2;
-	int		i;
-
-	s2 = malloc((ft_strlen(s1) + 1) * sizeof(char));
-	if (!s2)
-	{
-		return (NULL);
-	}
-	i = 0;
-	while (s1[i])
-	{
-		s2[i] = s1[i];
-		i++;
-	}
-	s2[i] = '\0';
-	return (s2);
+	if (num >= 10)
+		deli_rec(num / 10, count);
+	(*count) += ft_printchar(num % 10 + '0');
 }
 
+int	print_hex(uintptr_t num, int counter, char upper)
+{
+	if (num >= 16)
+		counter = print_hex(num / 16, counter, upper);
+	if (upper == 'X')
+		counter += ft_printchar("0123456789ABCDEF"[num % 16]);
+	else
+		counter += ft_printchar("0123456789abcdef"[num % 16]);
+	return (counter);
+}
 /*
 no truncation
 zero-pad (0) ->		left-padding, but ignored if '-' was used,

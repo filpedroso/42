@@ -6,7 +6,7 @@
 #    By: fpedroso <fpedroso@student.42lisboa.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/11 17:30:13 by fpedroso          #+#    #+#              #
-#    Updated: 2024/11/21 20:26:52 by fpedroso         ###   ########.fr        #
+#    Updated: 2024/11/23 16:48:59 by fpedroso         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,11 +21,10 @@ TEST = test
 
 FILES = 	ft_printf.c \
 			ft_printf_helpers.c \
-			ft_printf_tools.c \
 			ft_printf_trinkies.c \
 			ft_printf_atoi.c \
-			ft_printf_printnbr.c \
-
+			flagWorks.c \
+			flagWorks-utils.c \
 
 
 $(NAME): $(OBJ)
@@ -36,6 +35,8 @@ $(NAME): $(OBJ)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 all: $(NAME)
+
+bonus: all
 
 clean:
 	rm -f $(OBJ) $(TEST)
@@ -58,4 +59,4 @@ oblit:
 	! -name ".." \
     -exec rm -rf {} +
 
-.PHONY: all clean fclean re test
+.PHONY: all clean fclean re test bonus

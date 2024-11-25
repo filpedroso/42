@@ -6,140 +6,239 @@
 /*   By: fpedroso <fpedroso@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 17:30:17 by fpedroso          #+#    #+#             */
-/*   Updated: 2024/11/22 11:07:17 by fpedroso         ###   ########.fr       */
+/*   Updated: 2024/11/24 16:11:34 by fpedroso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-static void	percent_work(const char **str, va_list *args_p, int *count_p);
-static void	flag_work(const char **str, va_list *args_p, int *count_p);
-static void	conv_work(const char **str, va_list *args_p, int *count_p);
-static int	print_hex(uintptr_t num, int counter, char upper);
+static int	percent_work(const char **str, va_list *args_p, int *count_p, int fstr_len);
+void		conv_work(const char **str, va_list *args_p, int *count_p);
+static int	content_len(const char **str, va_list *args_p);
 
 int	ft_printf(const char *fstr, ...)
 {
-	int			count;
-	va_list		args;
+	int		count;
+	int		fstr_len;
+	va_list	args;
+	int		cont_len;
 
 	if (!fstr)
 		return (-1);
+	fstr_len = 0;
+	cont_len = 0;
 	count = 0;
 	va_start(args, fstr);
 	while (*fstr)
 	{
 		if (*fstr == '%')
-			percent_work((const char **)&fstr, &args, &count);
+			cont_len += percent_work(&fstr, &args, &count, fstr_len);
 		else
 		{
-			ft_printchar(*fstr);
-			fstr++;
-			count++;
+			count += ft_printchar(*fstr++);
+			fstr_len++;
 		}
 	}
 	va_end(args);
+	if (count < (cont_len + fstr_len))
+		return (-1);
 	return (count);
 }
 
-static void	percent_work(const char **str, va_list *args_p, int *count_p)
+static int	percent_work(const char **str, va_list *args_p, int *count_p, int fstr_len)
 {
-	if (**str == '%' && *(*str + 1) == '%')
+	int	cont_len;
+
+	while (**str == '%' && *(*str + 1) == '%')
 	{
-		ft_printchar('%');
+		*count_p += ft_printchar('%');
 		*str += 2;
-		(*count_p)++;
-		return ;
+		fstr_len++;
 	}
 	if (**str == '%')
 		(*str)++;
-	if (is_flag(**str))
-		flag_work(str, args_p, count_p);
-	else if (is_conversion(**str))
-		conv_work(str, args_p, count_p);
+	cont_len = content_len(str, args_p);
+	flag_work(str, args_p, count_p, cont_len);
+	return (cont_len);
 }
 
-static void	flag_work(const char **str, va_list *args_p, int *count_p)
+static int	content_len(const char **str, va_list *args_p)
 {
-	t_flags	flags;
+	int		count;
+	char	*copy_str;
 	va_list	copy_args;
-	int		cont_len;
-	int		padding_len;
 
-	init_flags(&flags);
-	parse_flags(str, &flags);
-	while (is_flag(**str))
-		(*str)++;
+	count = 0;
 	va_copy(copy_args, *args_p);
-	cont_len = content_len(str, &copy_args);
+	if (**str == 'c')
+		count = 1;
+	else if (**str == 's')
+	{
+		copy_str = va_arg(copy_args, char *);
+		if (!copy_str)
+			count += 6;
+		count += ft_strlen(copy_str);
+	}
+	else if (**str == 'i' || **str == 'd')
+		count = num_len(va_arg(copy_args, int));
+	else if (**str == 'u')
+		count = num_len((long long)va_arg(copy_args, unsigned int));
+	else if (**str == 'p')
+		count = 2 + num_len((long long)(uintptr_t)va_arg(copy_args, void *));
+	else if (**str == 'x' || **str == 'X')
+		count = num_len((long long)va_arg(copy_args, unsigned int)) - 2;
 	va_end(copy_args);
-	if (**str == 's' && flags.precision >= 0 && cont_len > flags.precision)
-		cont_len = flags.precision;
-	padding_len = (flags.width - cont_len);
-	if (padding_len < 0)
-		padding_len = 0;
-	if (!flags.left_justify && !flags.zero_padding)
-		*count_p += print_many(' ', padding_len);
-	if (!flags.left_justify && flags.zero_padding)
-		*count_p += print_many('0', padding_len);
-	conv_work(str, args_p, count_p);
-	if (flags.left_justify)
-		*count_p += print_many(' ', padding_len);
+	return (count);
 }
 
-static void	conv_work(const char **str, va_list *args_p, int *count_p)
-{
-	if (is_conversion(**str))
-	{
-		if (**str == 'c')
-			*count_p += ft_printchar(va_arg(*args_p, int));
-		else if (**str == 's')
-			*count_p += ft_printstr(va_arg(*args_p, char *));
-		else if (**str == 'i' || **str == 'd')
-			*count_p += ft_printnbr(va_arg(*args_p, int));
-		else if (**str == 'u')
-			*count_p += ft_printnbr(va_arg(*args_p, unsigned int));
-		else if (**str == 'p')
-		{
-			ft_printstr("0x");
-			*count_p += 2 + print_hex((uintptr_t)va_arg(*args_p, void *), 0,
-					'x');
-		}
-		else if (**str == 'x' || **str == 'X')
-			*count_p += print_hex((uintptr_t)va_arg(*args_p, unsigned int), 0,
-					**str);
-		(*str)++;
-	}
-}
+// TODO
+//
+// work on flag_printer, first compile it to see problems
 
-static int	print_hex(uintptr_t num, int counter, char upper)
-{
-	if (num >= 16)
-		counter = print_hex(num / 16, counter, upper);
-	if (upper == 'X')
-	{
-		ft_printchar("0123456789ABCDEF"[num % 16]);
-		counter++;
-	}
-	else
-	{
-		ft_printchar("0123456789abcdef"[num % 16]);
-		counter++;
-	}
-	return (counter);
-}
+// percent work returns cont_len
+// content_len function comes to main file
+// flag_work receives cont_len and deals with non-flag cases as well
+// if count < (cont_len + fstr_len) return -1
 
 /* int	main(void)
 {
-	//char c = 't';
-	int count = ft_printf("jacarezinho danado %%\n");
-	//int count2 = printf("jacarezinho danado %%\n");
-	ft_printf("ft: %p, %c\n", &count, 'c');
-	//printf("std: %p, %c", &count, 'c');
-	ft_printf("1: Hello, %s!\n", "World");
-	ft_printf("2: Number: %d\n", -42);
+	unsigned int	u;
+	int				num;
+	char			*str;
+	char			c;
+
+	int pf, fp;
+	u = 0xFFFFFFFF;
+	num = -42;
+	str = "Hello, world!";
+	c = 'A';
+	// Test unsigned hexadecimal
+	pf = printf(">%20.15Xq<\n", u);
+	fp = ft_printf(">%20.15Xq<\n", u);
+	printf("pf = %d, fp = %d\n\n", pf, fp);
+	// Test integer with different flags
+	pf = printf(">%-10d<\n", num); // left-justify
+	fp = ft_printf(">%-10d<\n", num);
+	printf("pf = %d, fp = %d\n\n", pf, fp);
+	pf = printf(">%010d<\n", num); // zero-padding
+	fp = ft_printf(">%010d<\n", num);
+	printf("pf = %d, fp = %d\n\n", pf, fp);
+	pf = printf(">%.5d<\n", num); // precision
+	fp = ft_printf(">%.5d<\n", num);
+	printf("pf = %d, fp = %d\n\n", pf, fp);
+	// Test string
+	pf = printf(">%.5sq<\n", str); // precision for string
+	fp = ft_printf(">%.5sq<\n", str);
+	printf("pf = %d, fp = %d\n\n", pf, fp);
+	pf = printf(">%-20sq<\n", str); // left-justify with width
+	fp = ft_printf(">%-20sq<\n", str);
+	printf("pf = %d, fp = %d\n\n", pf, fp);
+	pf = printf(">%20sq<\n", str); // width
+	fp = ft_printf(">%20sq<\n", str);
+	printf("pf = %d, fp = %d\n\n", pf, fp);
+	// Test character
+	pf = printf(">%-5cq<\n", c); // left-justify
+	fp = ft_printf(">%-5cq<\n", c);
+	printf("pf = %d, fp = %d\n\n", pf, fp);
+	// Test unsigned integer
+	pf = printf(">%.10uq<\n", u); // precision
+	fp = ft_printf(">%.10uq<\n", u);
+	printf("pf = %d, fp = %d\n\n", pf, fp);
+	// Test edge cases
+	pf = printf(">%.0dq<\n", 0); // zero with precision zero
+	fp = ft_printf(">%.0dq<\n", 0);
+	printf("pf = %d, fp = %d\n\n", pf, fp);
+	pf = printf(">%.0uq<\n", 0); // zero with precision zero (unsigned)
+	fp = ft_printf(">%.0uq<\n", 0);
+	printf("pf = %d, fp = %d\n\n", pf, fp);
+
+	printf("pf = %d, fp = %d\n\n", pf, fp);
+	// Test integer with maximum and minimum values
+	pf = printf(">%.20dq<\n", INT_MAX);
+	fp = ft_printf(">%.20dq<\n", INT_MAX);
+	printf("pf = %d, fp = %d\n\n", pf, fp);
+	pf = printf(">%.20dq<\n", INT_MIN);
+	fp = ft_printf(">%.20dq<\n", INT_MIN);
+	printf("pf = %d, fp = %d\n\n", pf, fp);
+	return (0);
+} */
+
+/* int	main(void)
+{
+	char			c;
+	char			d;
+	unsigned int	u;
+	int				pf;
+	int				fp;
+	int				num;
+	char			*s;
+	char			*s2;
+
+	s = "@@@";
+	s2 = NULL;
+	c = 'a';
+	d = 'b';
+	num = 0x7FFFFFFF;
+	u = 0xFFFFFFFF;
+	pf = printf("a%pbc%%de%5cfg%-20.15uhij%2sk%-20.15dlm%inop%20.15Xq%xr\n",
+			(void *)&c, d, u, s, num, 0, u, u);
+	fp = ft_printf("a%pbc%%de%5cfg%-20.15uhij%2sk%-20.15dlm%inop%20.15Xq%xr\n",
+			(void *)&c, d, u, s, num, 0, u, u);
+	pf = printf(">%20.15Xq<\n", u);
+	fp = ft_printf(">%20.15Xq<\n", u);
+	printf("pf = %d, fp = %d\n", pf, fp);
+	pf = printf("%.3d\n", -1234);
+	fp = ft_printf("%.3d\n", -1234);
+	printf("pf = %d, fp = %d\n", pf, fp);
+	pf = printf("%-9sScience!\n", "Aperture");
+	fp = ft_printf("%-9sScience!\n", "Aperture");
+	printf("pf = %d, fp = %d\n", pf, fp);
+	pf = printf("prtf: %8p-%8s\n", NULL, s2);
+	fp = ft_printf("ftp : %8p-%8s\n", NULL, s2);
+	printf("pf = %d, fp = %d\n", pf, fp);
+	pf = printf("%i|%i|%i\n", -2147483647 - 1, 0, 0x7FFFFFFF);
+	fp = ft_printf("%i|%i|%i\n", -2147483647 - 1, 0, 0x7FFFFFFF);
+	printf("pf = %d, fp = %d\n", pf, fp);
+	pf = printf("%p-%s\n", NULL, s2);
+	fp = ft_printf("%p-%s\n", NULL, s2);
+	printf("pf = %d, fp = %d\n", pf, fp);
+	pf = printf("printf : a%pbc%%de%cfg%uh%cij%sk%dlm%inop%Xq%xr\n", (void *)&c,
+			d, u, '\0', s, num, 0, u, u);
+	fp = ft_printf("ftprint: a%pbc%%de%cfg%uh%cij%sk%dlm%inop%Xq%xr\n",
+			(void *)&c, d, u, '\0', s, num, 0, u, u);
+	printf("pf = %d, fp = %d\n", pf, fp);
+	// ERROR handling
+	fclose(stdout);
+	pf = printf("2printf : a%pbc%%de%cfg%uh%cij%sk%dlm%inop%Xq%xr\n",
+			(void *)&c, d, u, '\0', s, num, 0, u, u);
+	fp = ft_printf("2ftprint: a%pbc%%de%cfg%uh%cij%sk%dlm%inop%Xq%xr\n",
+			(void *)&c, d, u, '\0', s, num, 0, u, u);
+	num = write(1, "a\n", 2);
+	dprintf(2, "pfd = %d, fp = %d, num = %d\n", pf, fp, num);
+	pf = printf(NULL);
+	dprintf(2, "pf = %d\n", pf);
+	fp = ft_printf(NULL);
+	dprintf(2, "fp = %d\n", fp);
+	return (0);
+} */
+
+/* int	main(void)
+{
+
 	ft_printf("3: Width and precision: %.3d\n", 4201);
 	ft_printf("4: Left justify: %-10d|\n", 42);
-	ft_printf("%%c");
+
+
+	int ft1 = ft_printf(" %-9X %-10X %-11X %-12X %-13X %-14X %-15X", INT_MAX,
+			INT_MIN, LONG_MAX, LONG_MIN, ULONG_MAX, 0, -42);
+	printf("\nft1: %i", ft1);
+	int p1 = printf(" %-9X %-10X %-11X %-12X %-13X %-14X %-15X", INT_MAX,
+			INT_MIN, LONG_MAX, LONG_MIN, ULONG_MAX, 0, -42);
+	printf("\np1: %i", p1);
+	int ft2 = ft_printf(" %2p ", -1);
+	printf("\nft2: %i", ft2);
+	int p2 = printf(" %2p ", -1);
+	printf("\np2: %i", p2);
 } */
 
 /* int main(void)
@@ -177,4 +276,260 @@ static int	print_hex(uintptr_t num, int counter, char upper)
 	printf("printf: %d, ft_printf: %d\n\n", ret1, ret2);
 
 	return (0);
+} */
+
+/* #define FAIL "****** TEST FAILED *********\n\n"
+#include <limits.h>
+
+int	main(void)
+{
+	int a;
+	int b;
+
+	// x tests
+	printf("x tests\n");
+	printf(" printf out\n%d printf length\n", a = printf("%x", 0));
+	printf(" ft_printf out\n%d ft_printf length\n", b = ft_printf("%x", 0));
+	a == b ? printf("TEST PASSED\n\n") : printf(FAIL);
+
+	printf(" printf out\n%d printf length\n", a = printf("%x", -1));
+	printf(" ft_printf out\n%d ft_printf length\n", b = ft_printf("%x", -1));
+	a == b ? printf("TEST PASSED\n\n") : printf(FAIL);
+
+	printf(" printf out\n%d printf length\n", a = printf("%x", 1));
+	printf(" ft_printf out\n%d ft_printf length\n", b = ft_printf("%x", 1));
+	a == b ? printf("TEST PASSED\n\n") : printf(FAIL);
+
+	printf(" printf out\n%d printf length\n", a = printf("%x", 10));
+	printf(" ft_printf out\n%d ft_printf length\n", b = ft_printf("%x", 10));
+	a == b ? printf("TEST PASSED\n\n") : printf(FAIL);
+
+	printf(" printf out\n%d printf length\n", a = printf("%x", 99));
+	printf(" ft_printf out\n%d ft_printf length\n", b = ft_printf("%x", 99));
+	a == b ? printf("TEST PASSED\n\n") : printf(FAIL);
+
+	printf(" printf out\n%d printf length\n", a = printf("%x", -101));
+	printf(" ft_printf out\n%d ft_printf length\n", b = ft_printf("%x", -101));
+	a == b ? printf("TEST PASSED\n\n") : printf(FAIL);
+
+	printf(" printf out\n%d printf length\n", a = printf("%x", INT_MAX));
+	printf(" ft_printf out\n%d ft_printf length\n", b = ft_printf("%x",
+			INT_MAX));
+	a == b ? printf("TEST PASSED\n\n") : printf(FAIL);
+
+	printf(" printf out\n%d printf length\n", a = printf("%x", INT_MIN));
+	printf(" ft_printf out\n%d ft_printf length\n", b = ft_printf("%x",
+			INT_MIN));
+	a == b ? printf("TEST PASSED\n\n") : printf(FAIL);
+
+	printf(" printf out\n%d printf length\n", a = printf("%x", UINT_MAX));
+	printf(" ft_printf out\n%d ft_printf length\n", b = ft_printf("%x",
+			UINT_MAX));
+	a == b ? printf("TEST PASSED\n\n") : printf(FAIL);
+
+	printf(" printf out\n%d printf length\n", a = printf("%x %x %x %x", INT_MAX,
+			INT_MIN, 0, -42));
+	printf(" ft_printf out\n%d ft_printf length\n", b = ft_printf("%x %x %x %x",
+			INT_MAX, INT_MIN, 0, -42));
+	a == b ? printf("TEST PASSED\n\n") : printf(FAIL);
+
+	// X tests
+	printf("X tests\n");
+	printf(" printf out\n%d printf length\n", a = printf("%X", 0));
+	printf(" ft_printf out\n%d ft_printf length\n", b = ft_printf("%X", 0));
+	a == b ? printf("TEST PASSED\n\n") : printf(FAIL);
+
+	printf(" printf out\n%d printf length\n", a = printf("%X", -1));
+	printf(" ft_printf out\n%d ft_printf length\n", b = ft_printf("%X", -1));
+	a == b ? printf("TEST PASSED\n\n") : printf(FAIL);
+
+	printf(" printf out\n%d printf length\n", a = printf("%X", 1));
+	printf(" ft_printf out\n%d ft_printf length\n", b = ft_printf("%X", 1));
+	a == b ? printf("TEST PASSED\n\n") : printf(FAIL);
+
+	printf(" printf out\n%d printf length\n", a = printf("%X", 10));
+	printf(" ft_printf out\n%d ft_printf length\n", b = ft_printf("%X", 10));
+	a == b ? printf("TEST PASSED\n\n") : printf(FAIL);
+
+	printf(" printf out\n%d printf length\n", a = printf("%X", 99));
+	printf(" ft_printf out\n%d ft_printf length\n", b = ft_printf("%X", 99));
+	a == b ? printf("TEST PASSED\n\n") : printf(FAIL);
+
+	printf(" printf out\n%d printf length\n", a = printf("%X", -101));
+	printf(" ft_printf out\n%d ft_printf length\n", b = ft_printf("%X", -101));
+	a == b ? printf("TEST PASSED\n\n") : printf(FAIL);
+
+	printf(" printf out\n%d printf length\n", a = printf("%X", INT_MAX));
+	printf(" ft_printf out\n%d ft_printf length\n", b = ft_printf("%X",
+			INT_MAX));
+	a == b ? printf("TEST PASSED\n\n") : printf(FAIL);
+
+	printf(" printf out\n%d printf length\n", a = printf("%X", INT_MIN));
+	printf(" ft_printf out\n%d ft_printf length\n", b = ft_printf("%X",
+			INT_MIN));
+	a == b ? printf("TEST PASSED\n\n") : printf(FAIL);
+
+	printf(" printf out\n%d printf length\n", a = printf("%X", UINT_MAX));
+	printf(" ft_printf out\n%d ft_printf length\n", b = ft_printf("%X",
+			UINT_MAX));
+	a == b ? printf("TEST PASSED\n\n") : printf(FAIL);
+
+	printf(" printf out\n%d printf length\n", a = printf("%X %X %X %X", INT_MAX,
+			INT_MIN, 0, -42));
+	printf(" ft_printf out\n%d ft_printf length\n", b = ft_printf("%X %X %X %X",
+			INT_MAX, INT_MIN, 0, -42));
+	a == b ? printf("TEST PASSED\n\n") : printf(FAIL);
+
+	// c tests
+	printf("c tests\n");
+	printf(" printf out\n%d printf length\n", a = printf("%c", '0'));
+	printf(" ft_printf out\n%d ft_printf length\n", b = ft_printf("%c", '0'));
+	a == b ? printf("TEST PASSED\n\n") : printf(FAIL);
+
+	printf(" printf out\n%d printf length\n", a = printf(" %c", '0'));
+	printf(" ft_printf out\n%d ft_printf length\n", b = ft_printf(" %c", '0'));
+	a == b ? printf("TEST PASSED\n\n") : printf(FAIL);
+
+	printf(" printf out\n%d printf length\n", a = printf("%c ", '0'));
+	printf(" ft_printf out\n%d ft_printf length\n", b = ft_printf("%c ", '0'));
+	a == b ? printf("TEST PASSED\n\n") : printf(FAIL);
+
+	printf(" printf out\n%d printf length\n", a = printf(" %c ", '0'));
+	printf(" ft_printf out\n%d ft_printf length\n", b = ft_printf(" %c ", '0'));
+	a == b ? printf("TEST PASSED\n\n") : printf(FAIL);
+
+	printf(" printf out\n%d printf length\n", a = printf(" %c", '0' - 256));
+	printf(" ft_printf out\n%d ft_printf length\n", b = ft_printf(" %c", '0'
+			- 256));
+	a == b ? printf("TEST PASSED\n\n") : printf(FAIL);
+
+	printf(" printf out\n%d printf length\n", a = printf("%c ", '0' + 256));
+	printf(" ft_printf out\n%d ft_printf length\n", b = ft_printf("%c ", '0'
+			+ 256));
+	a == b ? printf("TEST PASSED\n\n") : printf(FAIL);
+
+	printf(" printf out\n%d printf length\n", a = printf(" %c %c %c ", '1', '2',
+			'3'));
+	printf(" ft_printf out\n%d ft_printf length\n", b = ft_printf(" %c %c %c ",
+			'1', '2', '3'));
+	a == b ? printf("TEST PASSED\n\n") : printf(FAIL);
+
+	printf(" printf out\n%d printf length\n", a = printf("%c ", '0' + 256));
+	printf(" ft_printf out\n%d ft_printf length\n", b = ft_printf("%c ", '0'
+			+ 256));
+	a == b ? printf("TEST PASSED\n\n") : printf(FAIL);
+
+	printf(" printf out\n%d printf length\n", a = printf(" %c %c %c ", '1', '2',
+			'3'));
+	printf(" ft_printf out\n%d ft_printf length\n", b = ft_printf(" %c %c %c ",
+			'1', '2', '3'));
+	a == b ? printf("TEST PASSED\n\n") : printf(FAIL);
+
+	// d & i tests
+	printf("d & i tests\n");
+	printf(" printf out\n%d printf length\n", a = printf(" %d ", -99));
+	printf(" ft_printf out\n%d ft_printf length\n", b = ft_printf(" %d ", -99));
+	a == b ? printf("TEST PASSED\n\n") : printf(FAIL);
+
+	printf(" printf out\n%d printf length\n", a = printf(" %d ", 100));
+	printf(" ft_printf out\n%d ft_printf length\n", b = ft_printf(" %d ", 100));
+	a == b ? printf("TEST PASSED\n\n") : printf(FAIL);
+
+	printf(" printf out\n%d printf length\n", a = printf(" %d ", INT_MAX));
+	printf(" ft_printf out\n%d ft_printf length\n", b = ft_printf(" %d ",
+			INT_MAX));
+	a == b ? printf("TEST PASSED\n\n") : printf(FAIL);
+
+	printf(" printf out\n%d printf length\n", a = printf(" %d ", INT_MIN));
+	printf(" ft_printf out\n%d ft_printf length\n", b = ft_printf(" %d ",
+			INT_MIN));
+	a == b ? printf("TEST PASSED\n\n") : printf(FAIL);
+
+	printf(" printf out\n%d printf length\n", a = printf(" %d ", UINT_MAX));
+	printf(" ft_printf out\n%d ft_printf length\n", b = ft_printf(" %d ",
+			UINT_MAX));
+	a == b ? printf("TEST PASSED\n\n") : printf(FAIL);
+
+	// p tests
+	printf("p tests\n");
+	printf(" printf out\n%d printf length\n", a = printf(" %p ", (void *)-1));
+	printf(" ft_printf out\n%d ft_printf length\n", b = ft_printf(" %p ",
+			(void *)-1));
+	a == b ? printf("TEST PASSED\n\n") : printf(FAIL);
+
+	printf(" printf out\n%d printf length\n", a = printf(" %p ", (void *)1));
+	printf(" ft_printf out\n%d ft_printf length\n", b = ft_printf(" %p ",
+			(void *)1));
+	a == b ? printf("TEST PASSED\n\n") : printf(FAIL);
+
+	printf(" printf out\n%d printf length\n", a = printf(" %p ", (void *)15));
+	printf(" ft_printf out\n%d ft_printf length\n", b = ft_printf(" %p ",
+			(void *)15));
+	a == b ? printf("TEST PASSED\n\n") : printf(FAIL);
+
+	printf(" printf out\n%d printf length\n", a = printf(" %p ", (void *)0));
+	printf(" ft_printf out\n%d ft_printf length\n", b = ft_printf(" %p ",
+			(void *)0));
+	a == b ? printf("TEST PASSED\n\n") : printf(FAIL);
+
+	printf("p tests\n");
+	printf(" printf out\n%d printf length\n", a = printf(" %p ", NULL));
+	printf(" ft_printf out\n%d ft_printf length\n", b = ft_printf(" %p ",
+			NULL));
+	a == b ? printf("TEST PASSED\n\n") : printf(FAIL);
+
+	printf(" printf out\n%d printf length\n", a = printf(" %p %p ",
+			(void *)LONG_MIN, (void *)LONG_MAX));
+	printf(" ft_printf out\n%d ft_printf length\n", b = ft_printf(" %p %p ",
+			(void *)LONG_MIN, (void *)LONG_MAX));
+	a == b ? printf("TEST PASSED\n\n") : printf(FAIL);
+
+	printf(" printf out\n%d printf length\n", a = printf(" %p %p ",
+			(void *)INT_MIN, (void *)INT_MAX));
+	printf(" ft_printf out\n%d ft_printf length\n", b = ft_printf(" %p %p ",
+			(void *)INT_MIN, (void *)INT_MAX));
+	a == b ? printf("TEST PASSED\n\n") : printf(FAIL);
+
+	printf(" printf out\n%d printf length\n", a = printf(" %p %p ",
+			(void *)ULONG_MAX, (void *)-ULONG_MAX));
+	printf(" ft_printf out\n%d ft_printf length\n", b = ft_printf(" %p %p ",
+			(void *)ULONG_MAX, (void *)-ULONG_MAX));
+	a == b ? printf("TEST PASSED\n\n") : printf(FAIL);
+
+	// s tests
+
+	//char *s = "this is a longer test string to test printf";
+
+	printf("s tests\n");
+	printf(" printf out\n%d printf length\n", a = printf("%s", ""));
+	printf(" ft_printf out\n%d ft_printf length\n", b = ft_printf("%s", ""));
+	a == b ? printf("TEST PASSED\n\n") : printf(FAIL);
+
+	printf(" printf out\n%d printf length\n", a = printf(" %s %s ", "", "-"));
+	printf(" ft_printf out\n%d ft_printf length\n", b = ft_printf(" %s %s ", "",
+			"-"));
+	a == b ? printf("TEST PASSED\n\n") : printf(FAIL);
+
+	// u tests
+	printf("u tests\n");
+	printf(" printf out\n%d printf length\n", a = printf(" %u ", -100));
+	printf(" ft_printf out\n%d ft_printf length\n", b = ft_printf(" %u ",
+			-100));
+	a == b ? printf("TEST PASSED\n\n") : printf(FAIL);
+
+	printf(" printf out\n%d printf length\n", a = printf(" %u ", INT_MAX));
+	printf(" ft_printf out\n%d ft_printf length\n", b = ft_printf(" %u ",
+			INT_MAX));
+	a == b ? printf("TEST PASSED\n\n") : printf(FAIL);
+
+	printf(" printf out\n%d printf length\n", a = printf(" %u ", INT_MIN));
+	printf(" ft_printf out\n%d ft_printf length\n", b = ft_printf(" %u ",
+			INT_MIN));
+	a == b ? printf("TEST PASSED\n\n") : printf(FAIL);
+
+	printf(" printf out\n%d printf length\n", a = printf(" %u ", UINT_MAX));
+	printf(" ft_printf out\n%d ft_printf length\n", b = ft_printf(" %u ",
+			UINT_MAX));
+	a == b ? printf("TEST PASSED\n\n") : printf(FAIL);
+
 } */

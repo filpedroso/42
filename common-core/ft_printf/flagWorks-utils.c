@@ -1,16 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_printf_tools.c                                  :+:      :+:    :+:   */
+/*   flagWorks-utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fpedroso <fpedroso@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/19 20:09:16 by fpedroso          #+#    #+#             */
-/*   Updated: 2024/11/20 19:55:47 by fpedroso         ###   ########.fr       */
+/*   Created: 2024/11/23 16:29:54 by fpedroso          #+#    #+#             */
+/*   Updated: 2024/11/23 23:06:54 by fpedroso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
+
+int	is_flag(char c)
+{
+	return (ft_isdigit(c) || c == '-' || c == '.' || c == '0');
+}
+
+void	init_flags(t_flags *flags)
+{
+	flags->has_flag = 0;
+	flags->l_just = 0;
+	flags->zero_pad = 0;
+	flags->precision = -1;
+	flags->width = 0;
+	flags->conv = '\0';
+}
 
 int	print_many(char c, int amount)
 {
@@ -25,14 +40,6 @@ int	print_many(char c, int amount)
 		amount--;
 	}
 	return (count);
-}
-
-void	init_flags(t_flags *flags)
-{
-	flags->left_justify = 0;
-	flags->zero_padding = 0;
-	flags->precision = -1;
-	flags->width = 0;
 }
 
 int	num_len(long long num)
@@ -55,13 +62,4 @@ int	num_len(long long num)
 	return (len + minus_flag);
 }
 
-int	is_flag(char c)
-{
-	return (c == '-' || c == '.' || c == '0');
-}
 
-int	is_conversion(char c)
-{
-	return (c == 'c' || c == 's' || c == 'p' || c == 'd' || c == 'i' || c == 'u'
-		|| c == 'x' || c == 'X');
-}
