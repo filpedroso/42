@@ -6,13 +6,14 @@
 /*   By: fpedroso <fpedroso@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 17:30:17 by fpedroso          #+#    #+#             */
-/*   Updated: 2024/11/26 17:02:16 by fpedroso         ###   ########.fr       */
+/*   Updated: 2024/11/26 17:48:35 by fpedroso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-static int	percent_work(const char **str, va_list *args_p, int *count_p, int *fstr_len);
+static int	percent_work(const char **str, va_list *args_p, int *count_p,
+				int *fstr_len);
 static int	content_len(const char *str, va_list *args_p);
 
 int	ft_printf(const char *fstr, ...)
@@ -44,9 +45,10 @@ int	ft_printf(const char *fstr, ...)
 	return (count);
 }
 
-static int	percent_work(const char **str, va_list *args_p, int *count_p, int *fstr_len)
+static int	percent_work(const char **str, va_list *args_p, int *count_p,
+		int *fstr_len)
 {
-	int	cont_len;
+	int			cont_len;
 	const char	*copy_s;
 
 	cont_len = 0;
@@ -365,7 +367,7 @@ int	main(void)
 	pf = printf(">%-10d<\n", num); // left-justify
 	fp = ft_printf(">%-10d<\n", num);
 	printf("pf = %d, fp = %d\n\n", pf, fp);
-	
+
 	pf = printf(">%010d<\n", num); // zero-padding
 	fp = ft_printf(">%010d<\n", num);
 	printf("pf = %d, fp = %d\n\n", pf, fp);
@@ -374,7 +376,7 @@ int	main(void)
 	pf = printf(">%.5d<\n", num); // precision
 	fp = ft_printf(">%.5d<\n", num);
 	printf("pfzero = %d, fpzero = %d\n\n", pf, fp);
-	
+
 // ####################################################################
 
 	// Test string
@@ -383,21 +385,24 @@ int	main(void)
 	fp = ft_printf(">%.5sq<\n", str);
 	printf("pf = %d, fp = %d\n\n", pf, fp);
 
-	printf("########################################################\n\n");
 
 	pf = printf(">%-20sq<\n", str); // left-justify with width
 	fp = ft_printf(">%-20sq<\n", str);
 	printf("pf = %d, fp = %d\n\n", pf, fp);
 
-	printf("########################################################\n");
+	printf("###########################################\n\n");
 
+	pf = printf("> %.s <\n", ""); // width
+	fp = ft_printf("> %.s <\n", "");
+	printf("pf = %d, fp = %d\n\n", pf, fp);
+
+	printf("###########################################\n");
+
+// ####################################################################
 	pf = printf(">%20sq<\n", str); // width
 	fp = ft_printf(">%20sq<\n", str);
 	printf("pf = %d, fp = %d\n\n", pf, fp);
-	
 
-// ####################################################################
-	
 	// Test character
 	pf = printf(">%-5cq<\n", c); // left-justify
 	fp = ft_printf(">%-5cq<\n", c);
@@ -425,22 +430,6 @@ int	main(void)
 	return (0);
 } */
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /* int	main(void)
 {
 	char			c;
@@ -458,7 +447,7 @@ int	main(void)
 	d = 'b';
 	num = 0x7FFFFFFF;
 	u = 0xFFFFFFFF;
-	
+
 	printf("c%%de\n");
 	ft_printf("c%%de\n");
 
@@ -486,7 +475,7 @@ int	main(void)
 	printf("pf = %d, fp = %d\n", pf, fp);
 
 	printf("\n#########################\n\n");
-	
+
 	pf = printf(">pf: %8s<\n", s2);
 	fp = ft_printf(">fp: %8s<\n", s2);
 	printf("pf = %d, fp = %d\n", pf, fp);
@@ -494,7 +483,7 @@ int	main(void)
 	pf = printf("pf: %8p-%8s\n", NULL, s2);
 	fp = ft_printf("fp: %8p-%8s\n", NULL, s2);
 	printf("pf = %d, fp = %d\n", pf, fp);
-	
+
 
 
 	pf = printf("%i|%i|%i\n", -2147483647 - 1, 0, 0x7FFFFFFF);
@@ -522,12 +511,6 @@ int	main(void)
 	dprintf(2, "fp = %d\n", fp);
 	return (0);
 } */
-
-
-
-
-
-
 
 /* int	main(void)
 {

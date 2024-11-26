@@ -6,7 +6,7 @@
 /*   By: fpedroso <fpedroso@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/23 16:20:52 by fpedroso          #+#    #+#             */
-/*   Updated: 2024/11/26 15:52:02 by fpedroso         ###   ########.fr       */
+/*   Updated: 2024/11/26 17:47:58 by fpedroso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,9 @@ static void	c_flag(va_list *args_p, int *count_p, t_flags flags)
 	else
 		*count_p += ft_printchar(va_arg(*args_p, int));
 }
-static void	str_flag(va_list *args_p, int *count_p, t_flags flags, int *cont_len)
+
+static void	str_flag(va_list *args_p, int *count_p, t_flags flags,
+		int *cont_len)
 {
 	int	trim;
 
@@ -96,7 +98,8 @@ static void	parse_flags(const char **format, t_flags *flags)
 		else if (**format == '.')
 		{
 			flags->precision = ft_atoi(*format + 1);
-			*format += num_len(flags->precision);
+			if (flags->precision)
+				*format += num_len(flags->precision);
 		}
 		else if (ft_isdigit(**format) && flags->precision == -1)
 		{
@@ -124,8 +127,7 @@ static void	conv_work(const char **str, va_list *args_p, int *count_p)
 		else if (**str == 'p')
 		{
 			*count_p += ft_printstr("0x", 0);
-			*count_p += print_hex((uintptr_t)va_arg(*args_p, void *), 0,
-					'x');
+			*count_p += print_hex((uintptr_t)va_arg(*args_p, void *), 0, 'x');
 		}
 		else if (**str == 'x' || **str == 'X')
 			*count_p += print_hex((uintptr_t)va_arg(*args_p, unsigned int), 0,
