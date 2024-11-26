@@ -6,7 +6,7 @@
 /*   By: fpedroso <fpedroso@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 17:30:17 by fpedroso          #+#    #+#             */
-/*   Updated: 2024/11/26 15:49:05 by fpedroso         ###   ########.fr       */
+/*   Updated: 2024/11/26 17:02:16 by fpedroso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,11 +49,13 @@ static int	percent_work(const char **str, va_list *args_p, int *count_p, int *fs
 	int	cont_len;
 	const char	*copy_s;
 
+	cont_len = 0;
 	while (**str == '%' && *(*str + 1) == '%')
 	{
 		*count_p += ft_printchar('%');
 		*str += 2;
 		(*fstr_len)++;
+		return (cont_len);
 	}
 	if (**str == '%')
 		(*str)++;
@@ -103,7 +105,7 @@ static int	content_len(const char *str, va_list *args_p)
 // flag_work receives cont_len and deals with non-flag cases as well
 // if count < (cont_len + fstr_len) return -1
 
-#include "ft_printf.h"
+/* #include "ft_printf.h"
 #include <limits.h>
 #include <stdio.h>
 
@@ -421,26 +423,23 @@ int	main(void)
 	fp = ft_printf(">%.20dq<\n", INT_MIN);
 	printf("pf = %d, fp = %d\n\n", pf, fp);
 	return (0);
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* int	main(void)
-{
 } */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /* int	main(void)
 {
@@ -459,10 +458,16 @@ int	main(void)
 	d = 'b';
 	num = 0x7FFFFFFF;
 	u = 0xFFFFFFFF;
+	
+	printf("c%%de\n");
+	ft_printf("c%%de\n");
+
 	pf = printf("a%pbc%%de%5cfg%-20.15uhij%2sk%-20.15dlm%inop%20.15Xq%xr\n",
 			(void *)&c, d, u, s, num, 0, u, u);
 	fp = ft_printf("a%pbc%%de%5cfg%-20.15uhij%2sk%-20.15dlm%inop%20.15Xq%xr\n",
 			(void *)&c, d, u, s, num, 0, u, u);
+
+
 	pf = printf(">%20.15Xq<\n", u);
 	fp = ft_printf(">%20.15Xq<\n", u);
 	printf("pf = %d, fp = %d\n", pf, fp);
@@ -472,9 +477,26 @@ int	main(void)
 	pf = printf("%-9sScience!\n", "Aperture");
 	fp = ft_printf("%-9sScience!\n", "Aperture");
 	printf("pf = %d, fp = %d\n", pf, fp);
-	pf = printf("prtf: %8p-%8s\n", NULL, s2);
-	fp = ft_printf("ftp : %8p-%8s\n", NULL, s2);
+
+
+	printf("#########################\n");
+
+	pf = printf(">pf: %8p-<\n", NULL);
+	fp = ft_printf(">fp: %8p-<\n", NULL);
 	printf("pf = %d, fp = %d\n", pf, fp);
+
+	printf("\n#########################\n\n");
+	
+	pf = printf(">pf: %8s<\n", s2);
+	fp = ft_printf(">fp: %8s<\n", s2);
+	printf("pf = %d, fp = %d\n", pf, fp);
+
+	pf = printf("pf: %8p-%8s\n", NULL, s2);
+	fp = ft_printf("fp: %8p-%8s\n", NULL, s2);
+	printf("pf = %d, fp = %d\n", pf, fp);
+	
+
+
 	pf = printf("%i|%i|%i\n", -2147483647 - 1, 0, 0x7FFFFFFF);
 	fp = ft_printf("%i|%i|%i\n", -2147483647 - 1, 0, 0x7FFFFFFF);
 	printf("pf = %d, fp = %d\n", pf, fp);
@@ -500,6 +522,12 @@ int	main(void)
 	dprintf(2, "fp = %d\n", fp);
 	return (0);
 } */
+
+
+
+
+
+
 
 /* int	main(void)
 {

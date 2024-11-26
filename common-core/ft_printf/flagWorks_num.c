@@ -6,7 +6,7 @@
 /*   By: fpedroso <fpedroso@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 13:22:46 by fpedroso          #+#    #+#             */
-/*   Updated: 2024/11/26 15:15:40 by fpedroso         ###   ########.fr       */
+/*   Updated: 2024/11/26 17:01:09 by fpedroso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,10 @@ void	num_flag(va_list *args_p, int *count_p, t_flags flags, int *cont_len)
 		num = va_arg(*args_p, unsigned int);
 	else if (flags.conv == 'p')
 	{
-		*count_p += ft_printstr("0x", 0);
 		num = (long)(uintptr_t)va_arg(*args_p, void *);
+		flags.precision = -1;
+		*cont_len += 2;
+		*count_p += 2;
 	}
 	num_flag_help(count_p, flags, cont_len, num);
 }
@@ -85,8 +87,13 @@ static int	printnbr_hub(long num, char conv_type)
 {
 	if (conv_type == 'i' || conv_type == 'd' || conv_type == 'u')
 		return (ft_printnbr(num));
-	if (conv_type == 'p' || conv_type == 'x' || conv_type == 'X')
+	if (conv_type == 'x' || conv_type == 'X')
 		return (print_hex((uintptr_t)num, 0, conv_type));
+	if (conv_type == 'p')
+	{
+		ft_printstr("0x", 0);
+		return (print_hex((uintptr_t)num, 0, conv_type));
+	}
 	else
 		return (0);
 }
