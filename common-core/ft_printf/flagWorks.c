@@ -6,7 +6,7 @@
 /*   By: fpedroso <fpedroso@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/23 16:20:52 by fpedroso          #+#    #+#             */
-/*   Updated: 2024/11/25 18:36:53 by fpedroso         ###   ########.fr       */
+/*   Updated: 2024/11/26 15:52:02 by fpedroso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,17 @@
 
 static void	c_flag(va_list *args_p, int *count_p, t_flags flags);
 static void	str_flag(va_list *args_p, int *count_p, t_flags flags,
-				int cont_len);
+				int *cont_len);
 static void	parse_flags(const char **format, t_flags *flags);
 static void	conv_work(const char **str, va_list *args_p, int *count_p);
 
 void	flag_works(const char **str, va_list *args_p, int *count_p,
-		int cont_len)
+		int *cont_len)
 {
 	t_flags	flags;
 
 	init_flags(&flags);
 	parse_flags(str, &flags);
-	while (!is_conversion(**str))
-		(*str)++;
 	if (!flags.has_flag)
 		conv_work(str, args_p, count_p);
 	else if (flags.conv == 'c')
@@ -34,7 +32,15 @@ void	flag_works(const char **str, va_list *args_p, int *count_p,
 	else if (flags.conv == 's')
 		str_flag(args_p, count_p, flags, cont_len);
 	else if (is_conversion(flags.conv))
+	{
+		if (flags.precision == 0)
+		{
+			*cont_len = 0;
+			(*str)++;
+			return ;
+		}
 		num_flag(args_p, count_p, flags, cont_len);
+	}
 	(*str)++;
 }
 
@@ -53,23 +59,26 @@ static void	c_flag(va_list *args_p, int *count_p, t_flags flags)
 	else
 		*count_p += ft_printchar(va_arg(*args_p, int));
 }
-static void	str_flag(va_list *args_p, int *count_p, t_flags flags, int cont_len)
+static void	str_flag(va_list *args_p, int *count_p, t_flags flags, int *cont_len)
 {
 	int	trim;
 
 	trim = 0;
-	if (cont_len > flags.precision)
-		trim = cont_len - flags.precision;
-	if (!flags.l_just && (flags.width > cont_len))
+	if (flags.precision >= 0 && *cont_len > flags.precision)
+		trim = *cont_len - flags.precision;
+	if (!flags.l_just && (flags.width > *cont_len))
 	{
-		*count_p += print_many(' ', (flags.width - cont_len) + trim);
+		*count_p += print_many(' ', (flags.width - *cont_len) + trim);
 		*count_p += ft_printstr(va_arg(*args_p, char *), trim);
 	}
-	else if (flags.l_just && (flags.width > cont_len))
+	else if (flags.l_just && (flags.width > *cont_len))
 	{
 		*count_p += ft_printstr(va_arg(*args_p, char *), trim);
-		*count_p += print_many(' ', (flags.width - cont_len) + trim);
+		*count_p += print_many(' ', (flags.width - *cont_len) + trim);
 	}
+	else
+		*count_p += ft_printstr(va_arg(*args_p, char *), trim);
+	*cont_len -= trim;
 }
 
 static void	parse_flags(const char **format, t_flags *flags)

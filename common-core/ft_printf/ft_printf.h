@@ -6,7 +6,7 @@
 /*   By: fpedroso <fpedroso@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 17:01:17 by fpedroso          #+#    #+#             */
-/*   Updated: 2024/11/25 17:56:09 by fpedroso         ###   ########.fr       */
+/*   Updated: 2024/11/26 14:46:00 by fpedroso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,9 @@ int			ft_isdigit(int c);
 int			ft_isascii(int c);
 size_t		ft_strlen(const char *s);
 void		flag_works(const char **str, va_list *args_p, int *count_p,
-				int cont_len);
+				int *cont_len);
 void		num_flag(va_list *args_p, int *count_p, t_flags flags,
-				int cont_len);
+				int *cont_len);
 int			is_flag(char c);
 void		init_flags(t_flags *flags);
 int			print_many(char c, int amount);

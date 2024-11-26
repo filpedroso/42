@@ -6,17 +6,17 @@
 /*   By: fpedroso <fpedroso@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 13:22:46 by fpedroso          #+#    #+#             */
-/*   Updated: 2024/11/25 19:02:01 by fpedroso         ###   ########.fr       */
+/*   Updated: 2024/11/26 15:15:40 by fpedroso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-static void	num_flag_help(int *count_p, t_flags flags, int cont_len, long num);
-static void	num_flag_left(int *count_p, t_flags flags, int cont_len, long num);
+static void	num_flag_help(int *count_p, t_flags flags, int *cont_len, long num);
+static void	num_flag_left(int *count_p, t_flags flags, int *cont_len, long num);
 static int	printnbr_hub(long num, char conv_type);
 
-void	num_flag(va_list *args_p, int *count_p, t_flags flags, int cont_len)
+void	num_flag(va_list *args_p, int *count_p, t_flags flags, int *cont_len)
 {
 	long	num;
 
@@ -28,6 +28,8 @@ void	num_flag(va_list *args_p, int *count_p, t_flags flags, int cont_len)
 		{
 			*count_p += ft_printchar('-');
 			num = -num;
+			if (flags.precision > 0)
+				*cont_len -= 1;
 		}
 	}
 	else if (flags.conv == 'u' || flags.conv == 'X' || flags.conv == 'x')
@@ -40,33 +42,33 @@ void	num_flag(va_list *args_p, int *count_p, t_flags flags, int cont_len)
 	num_flag_help(count_p, flags, cont_len, num);
 }
 
-static void	num_flag_help(int *count_p, t_flags flags, int cont_len, long num)
+static void	num_flag_help(int *count_p, t_flags flags, int *cont_len, long num)
 {
 	if (!flags.l_just)
 	{
-		if (flags.precision > cont_len)
+		if (flags.precision > *cont_len)
 		{
 			if (flags.precision > flags.width)
-				*count_p += print_many('0', (flags.precision - cont_len));
+				*count_p += print_many('0', (flags.precision - *cont_len));
 			else
 			{
 				*count_p += print_many(' ', (flags.width - flags.precision));
-				*count_p += print_many('0', (flags.precision - cont_len));
+				*count_p += print_many('0', (flags.precision - *cont_len));
 			}
 		}
-		else if (flags.width > cont_len)
-			*count_p += print_many(flags.zero_pad, (flags.width - cont_len));
+		else if (flags.width > *cont_len)
+			*count_p += print_many(flags.zero_pad, (flags.width - *cont_len));
 		*count_p += printnbr_hub(num, flags.conv);
 	}
 	else if (flags.l_just)
 		num_flag_left(count_p, flags, cont_len, num);
 }
 
-static void	num_flag_left(int *count_p, t_flags flags, int cont_len, long num)
+static void	num_flag_left(int *count_p, t_flags flags, int *cont_len, long num)
 {
-	if (flags.precision > cont_len)
+	if (flags.precision > *cont_len)
 	{
-		*count_p += print_many('0', (flags.precision - cont_len));
+		*count_p += print_many('0', (flags.precision - *cont_len));
 		*count_p += printnbr_hub(num, flags.conv);
 		if (flags.width > flags.precision)
 			*count_p += print_many(' ', (flags.width - flags.precision));
@@ -74,8 +76,8 @@ static void	num_flag_left(int *count_p, t_flags flags, int cont_len, long num)
 	else
 	{
 		*count_p += printnbr_hub(num, flags.conv);
-		if (flags.width > cont_len)
-			*count_p += print_many(' ', (flags.width - cont_len));
+		if (flags.width > *cont_len)
+			*count_p += print_many(' ', (flags.width - *cont_len));
 	}
 }
 
