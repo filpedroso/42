@@ -6,7 +6,7 @@
 /*   By: fpedroso <fpedroso@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/23 16:20:52 by fpedroso          #+#    #+#             */
-/*   Updated: 2024/11/26 17:47:58 by fpedroso         ###   ########.fr       */
+/*   Updated: 2024/11/27 20:05:00 by fpedroso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,6 +114,8 @@ static void	parse_flags(const char **format, t_flags *flags)
 
 static void	conv_work(const char **str, va_list *args_p, int *count_p)
 {
+	long	ptr_n;
+
 	if (is_conversion(**str))
 	{
 		if (**str == 'c')
@@ -126,8 +128,10 @@ static void	conv_work(const char **str, va_list *args_p, int *count_p)
 			*count_p += ft_printnbr(va_arg(*args_p, unsigned int));
 		else if (**str == 'p')
 		{
-			*count_p += ft_printstr("0x", 0);
-			*count_p += print_hex((uintptr_t)va_arg(*args_p, void *), 0, 'x');
+			ptr_n = (uintptr_t)va_arg(*args_p, void *);
+			*count_p += printnbr_hub((long)ptr_n, 'p') + 2;
+			if (!ptr_n)
+				*count_p -= 2;
 		}
 		else if (**str == 'x' || **str == 'X')
 			*count_p += print_hex((uintptr_t)va_arg(*args_p, unsigned int), 0,

@@ -6,7 +6,7 @@
 /*   By: fpedroso <fpedroso@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 13:22:46 by fpedroso          #+#    #+#             */
-/*   Updated: 2024/11/26 17:01:09 by fpedroso         ###   ########.fr       */
+/*   Updated: 2024/11/27 21:26:31 by fpedroso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 static void	num_flag_help(int *count_p, t_flags flags, int *cont_len, long num);
 static void	num_flag_left(int *count_p, t_flags flags, int *cont_len, long num);
-static int	printnbr_hub(long num, char conv_type);
 
 void	num_flag(va_list *args_p, int *count_p, t_flags flags, int *cont_len)
 {
@@ -46,6 +45,11 @@ void	num_flag(va_list *args_p, int *count_p, t_flags flags, int *cont_len)
 
 static void	num_flag_help(int *count_p, t_flags flags, int *cont_len, long num)
 {
+	if (flags.conv == 'p' && !num)
+	{
+		*cont_len -= 2;
+		*count_p -= 2;
+	}
 	if (!flags.l_just)
 	{
 		if (flags.precision > *cont_len)
@@ -83,7 +87,7 @@ static void	num_flag_left(int *count_p, t_flags flags, int *cont_len, long num)
 	}
 }
 
-static int	printnbr_hub(long num, char conv_type)
+int	printnbr_hub(long num, char conv_type)
 {
 	if (conv_type == 'i' || conv_type == 'd' || conv_type == 'u')
 		return (ft_printnbr(num));
@@ -91,6 +95,8 @@ static int	printnbr_hub(long num, char conv_type)
 		return (print_hex((uintptr_t)num, 0, conv_type));
 	if (conv_type == 'p')
 	{
+		if (!num)
+			return (ft_printstr("(nil)", 0));
 		ft_printstr("0x", 0);
 		return (print_hex((uintptr_t)num, 0, conv_type));
 	}

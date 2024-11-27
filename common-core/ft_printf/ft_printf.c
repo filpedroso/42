@@ -6,7 +6,7 @@
 /*   By: fpedroso <fpedroso@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 17:30:17 by fpedroso          #+#    #+#             */
-/*   Updated: 2024/11/26 17:48:35 by fpedroso         ###   ########.fr       */
+/*   Updated: 2024/11/27 21:31:33 by fpedroso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 static int	percent_work(const char **str, va_list *args_p, int *count_p,
 				int *fstr_len);
 static int	content_len(const char *str, va_list *args_p);
+static int	point_len(uintptr_t point);
 
 int	ft_printf(const char *fstr, ...)
 {
@@ -91,11 +92,26 @@ static int	content_len(const char *str, va_list *args_p)
 	else if (*str == 'u')
 		count = num_len((long long)va_arg(copy_args, unsigned int));
 	else if (*str == 'p')
-		count = hex_len((long long)(uintptr_t)va_arg(copy_args, void *));
+		count = point_len((uintptr_t)va_arg(copy_args, void *));
 	else if (*str == 'x' || *str == 'X')
 		count = hex_len((long long)va_arg(copy_args, unsigned int));
 	va_end(copy_args);
 	return (count);
+}
+
+static int	point_len(uintptr_t point)
+{
+	int	len;
+
+	len = 1;
+	if (!point)
+		return (5);
+	while (point >= 16)
+	{
+		point = point / 16;
+		len++;
+	}
+	return (len);
 }
 
 // TODO
@@ -392,11 +408,20 @@ int	main(void)
 
 	printf("###########################################\n\n");
 
+	pf = printf(">%-6p<\n",(void*)0); // width
+	fp = ft_printf(">%-6p<\n",(void*)0);
+	printf("pf = %d, fp = %d\n\n", pf, fp);
+	
+
+	printf("###########################################\n");
+
+	pf = printf(">%-9p<\n", (void*)LONG_MIN); // width
+	fp = ft_printf(">%-9p<\n", (void*)LONG_MIN);
+	printf("pf = %d, fp = %d\n\n", pf, fp);
+
 	pf = printf("> %.s <\n", ""); // width
 	fp = ft_printf("> %.s <\n", "");
 	printf("pf = %d, fp = %d\n\n", pf, fp);
-
-	printf("###########################################\n");
 
 // ####################################################################
 	pf = printf(">%20sq<\n", str); // width

@@ -6,7 +6,7 @@
 /*   By: fpedroso <fpedroso@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/23 16:29:54 by fpedroso          #+#    #+#             */
-/*   Updated: 2024/11/25 17:55:30 by fpedroso         ###   ########.fr       */
+/*   Updated: 2024/11/27 20:38:38 by fpedroso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ int	hex_len(long long num)
 	len = 1;
 	if (num < 0)
 	{
-		num = -num;
+		num = num * -num;
 		minus_flag = 1;
 	}
 	while (num >= 16)

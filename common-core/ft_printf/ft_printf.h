@@ -6,7 +6,7 @@
 /*   By: fpedroso <fpedroso@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 17:01:17 by fpedroso          #+#    #+#             */
-/*   Updated: 2024/11/26 14:46:00 by fpedroso         ###   ########.fr       */
+/*   Updated: 2024/11/27 21:30:27 by fpedroso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <limits.h>
 # include <stdarg.h>
 # include <stdio.h>
+# include <stdint.h>
 # include <stdlib.h>
 # include <unistd.h>
 
@@ -48,7 +49,7 @@ void		init_flags(t_flags *flags);
 int			print_many(char c, int amount);
 int			num_len(long long num);
 int			hex_len(long long num);
-
+int			printnbr_hub(long num, char conv_type);
 int			ft_atoi(const char *str);
 
 #endif
