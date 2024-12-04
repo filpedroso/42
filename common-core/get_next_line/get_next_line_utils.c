@@ -6,7 +6,7 @@
 /*   By: fpedroso <fpedroso@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 19:13:22 by fpedroso          #+#    #+#             */
-/*   Updated: 2024/12/03 16:07:44 by fpedroso         ###   ########.fr       */
+/*   Updated: 2024/12/04 15:14:08 by fpedroso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,32 @@ size_t	ft_strlen(const char *s)
 		ptr++;
 	}
 	return ((size_t)(ptr - s));
+}
+
+char	*ft_strdup(const char *s1)
+{
+	char	*s2;
+	int		i;
+
+	if (!s1)
+	{
+		s2 = (char *)malloc(1 * sizeof(char));
+		if (!s2)
+			return (NULL);
+		s2[0] = '\0';
+		return (s2);
+	}
+	s2 = (char *)malloc((ft_strlen(s1) + 1) * sizeof(char));
+	if (!s2)
+		return (NULL);
+	i = 0;
+	while (s1[i])
+	{
+		s2[i] = s1[i];
+		i++;
+	}
+	s2[i] = '\0';
+	return (s2);
 }
 
 char	*ft_strchr(const char *s, int c)
@@ -74,4 +100,13 @@ char	*ft_strjoin(char *s1, char *s2)
 	}
 	s3[total_len] = '\0';
 	return (s3);
+}
+
+void	nulfree(char **str)
+{
+	if (*str == NULL)
+		return ;
+	free(*str);
+	*str = NULL;
+	return ;
 }

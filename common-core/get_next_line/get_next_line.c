@@ -6,7 +6,7 @@
 /*   By: fpedroso <fpedroso@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 13:56:33 by fpedroso          #+#    #+#             */
-/*   Updated: 2024/12/03 15:28:24 by fpedroso         ###   ########.fr       */
+/*   Updated: 2024/12/04 15:48:56 by fpedroso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,22 +22,21 @@ char	*get_next_line(int fd)
 	static char	*leftovers;
 	char		*line;
 
+	if (!leftovers)
+		leftovers = ft_strdup("");
 	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
 	{
-		free(leftovers);
+		nulfree(&leftovers);
 		return (NULL);
 	}
 	line = linefill(leftovers, fd);
-	free(leftovers);
+	nulfree(&leftovers);
 	if (!line)
 		return (NULL);
 	leftovers = leftover_collector(line);
 	line = linetrim(line);
 	if (!line)
-	{
-		free(leftovers);
-		leftovers = NULL;
-	}
+		nulfree(&leftovers);
 	return (line);
 }
 
@@ -46,12 +45,14 @@ static char	*leftover_collector(char *line)
 	char	*leftovers;
 	int		i;
 
+	if (!line)
+		return (NULL);
 	i = 0;
 	while (line[i] && line[i] != '\n')
 		i++;
 	if (!line[i] || !line[i + 1])
 		return (NULL);
-	leftovers = ft_substr(line, i + 1, ft_strlen(line) - i);
+	leftovers = ft_substr(line, i + 1, ft_strlen(line) - i - 1);
 	if (!leftovers)
 		return (NULL);
 	return (leftovers);
@@ -68,7 +69,7 @@ static char	*linetrim(char *line)
 	if (!line[i] || !line[i + 1])
 		return (line);
 	new = ft_substr(line, 0, i);
-	free(line);
+	nulfree(&line);
 	if (!new)
 		return (NULL);
 	return (new);
@@ -89,14 +90,14 @@ static char	*linefill(char *leftovers, int fd)
 		leftovers = ft_strjoin(leftovers, buff);
 		if (!leftovers)
 		{
-			free(buff);
+			nulfree(&buff);
 			return (NULL);
 		}
 		if (ft_strchr(buff, '\n'))
 			break ;
 		bytes = read(fd, buff, BUFFER_SIZE);
 	}
-	free(buff);
+	nulfree(&buff);
 	if (bytes < 0)
 		return (NULL);
 	return (leftovers);

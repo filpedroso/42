@@ -1,28 +1,16 @@
 {
 	"configurations": [
 	{
-		"name": "(gdb) Launch",
+		"name": "(lldb) Launch",
 		"type": "cppdbg",
 		"request": "launch",
-		"program": "${workspaceFolder}/common-core/ft_printf/test",
+		"program": "/Users/filpedroso/42/common-core/get_next_line/test_gnl",
 		"args": [],
 		"stopAtEntry": false,
 		"cwd": "${fileDirname}",
 		"environment": [],
 		"externalConsole": false,
-		"MIMode": "gdb",
-		"setupCommands": [
-			{
-				"description": "Enable pretty-printing for gdb",
-				"text": "-enable-pretty-printing",
-				"ignoreFailures": true
-			},
-			{
-				"description": "Set Disassembly Flavor to Intel",
-				"text": "-gdb-set disassembly-flavor intel",
-				"ignoreFailures": true
-			}
-		]
+		"MIMode": "lldb"
 	}
 	]
 }
